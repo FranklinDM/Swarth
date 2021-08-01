@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE prefwindow SYSTEM "chrome://swarth/locale/preferences.dtd">
+
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            xmlns:html="http://www.w3.org/1999/xhtml"
+            id="SwarthPreferencesDialog"
+            title="&prefWindow.title;"
+            buttons="accept,cancel,extra1"
+            buttonlabelextra1="&resetAll.label;"
+            ondialogextra1="gPreferencesDialog.onDialogResetAll();"
+            onbeforeaccept="gPreferencesDialog.onBeforeAccept();">
+    <script type="application/javascript"
+            src="chrome://swarth/content/preferences.js" />
+    <script type="application/javascript"
+            src="chrome://global/content/treeUtils.js"/>
+    <prefpane id="SwarthDialogPane"
+              class="largeDialogContainer"
+              onpaneload="gPreferencesDialog.init();">
+        <preferences id="swarthPreferences">
+            <preference id="pref-enabled"
+                        name="extensions.swarth.enabled"
+                        type="bool"/>
+            <preference id="pref-follow_preferred_color_scheme"
+                        name="extensions.swarth.follow_preferred_color_scheme"
+                        type="bool"/>
+            <preference id="pref-keep_private_browsing_scope"
+                        name="extensions.swarth.keep_private_browsing_scope"
+                        type="bool"/>
+            <preference id="pref-default_method"
+                        name="extensions.swarth.default_method"
+                        type="int"/>
+            <preference id="pref-default_active_color"
+                        name="extensions.swarth.default_active_color"
+                        type="string"/>
+            <preference id="pref-default_background_color"
+                        name="extensions.swarth.default_background_color"
+                        type="string"/>
+            <preference id="pref-default_foreground_color"
+                        name="extensions.swarth.default_foreground_color"
+                        type="string"/>
+            <preference id="pref-default_link_color"
+                        name="extensions.swarth.default_link_color"
+                        type="string"/>
+            <preference id="pref-default_selection_color"
+                        name="extensions.swarth.default_selection_color"
+                        type="string"/>
+            <preference id="pref-default_visited_color"
+                        name="extensions.swarth.default_visited_color"
+                        type="string"/>
+        </preferences>
+
+        <!-- General -->
+        <groupbox>
+            <caption label="&general.groupLabel;"/>
+            <checkbox id="enableSwarth"
+                      label="&globalEnable.label;"
+                      accesskey="&globalEnable.accesskey;"
+                      preference="pref-enabled"/>
+            <checkbox id="followColorScheme"
+                      label="&followColorScheme.label;"
+                      accesskey="&followColorScheme.accesskey;"
+                      preference="pref-follow_preferred_color_scheme"/>
+            <checkbox id="keepPrivateScope"
+                      label="&keepPrivateScope.label;"
+                      accesskey="&keepPrivateScope.accesskey;"
+                      preference="pref-keep_private_browsing_scope"/>
+            <hbox align="center">
+                <label accesskey="&method.default.accesskey;"
+                       control="defaultMethod">&method.default.label;</label>
+                <menulist id="defaultMethod"
+                          flex="1"
+                          preference="pref-default_method">
+                    <menupopup>
+                        <menuitem id="method-0"
+                                  value="0"
+                                  label="&method.retainPageStyle.label;"/>
+                        <menuitem id="method-1"
+                                  value="1"
+                                  label="&method.cssProcessor.label;"/>
+                        <menuitem id="method-2"
+                                  value="2"
+                                  label="&method.cssSimple.label;"/>
+                        <menuitem id="method-3"
+                                  value="3"
+                                  label="&method.colorInversion.label;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+        </groupbox>
+
+        <!-- Colors -->
+        <hbox>
+            <!-- Main Colors -->
+            <groupbox flex="1">
+                <caption label="&mainColors.groupLabel;"/>
+                <hbox align="center">
+                    <label accesskey="&colors.foreground.accesskey;"
+                           control="colorsForeground">&colors.foreground.label;</label>
+                    <spacer flex="1"/>
+                    <html:input id="colorsForeground"
+                                type="color"
+                                preference="pref-default_foreground_color"
+                                onchange="gPreferencesDialog.onColorChanged(event.target);"/>
+                    <textbox id="colorsForegroundTextbox"
+                             size="5"
+                             preference="pref-default_foreground_color"
+                             onchange="gPreferencesDialog.onTextboxChanged(event.target);"/>
+                </hbox>
+                <hbox align="center">
+                    <label accesskey="&colors.background.accesskey;"
+                           control="colorsBackground">&colors.background.label;</label>
+                    <spacer flex="1"/>
+                    <html:input id="colorsBackground"
+                                type="color"
+                                preference="pref-default_background_color"
+                                onchange="gPreferencesDialog.onColorChanged(event.target);"/>
+                    <textbox id="colorsBackgroundTextbox"
+                             size="5"
+                             preference="pref-default_background_color"
+                             onchange="gPreferencesDialog.onTextboxChanged(event.target);"/>
+                </hbox>
+                <hbox align="center">
+                    <label accesskey="&colors.selection.accesskey;"
+                           control="colorsSelection">&colors.selection.label;</label>
+                    <spacer flex="1"/>
+                    <html:input id="colorsSelection"
+                                type="color"
+                                preference="pref-default_selection_color"
+                                onchange="gPreferencesDialog.onColorChanged(event.target);"/>
+                    <textbox id="colorsSelectionTextbox"
+                             size="5"
+                             preference="pref-default_selection_color"
+                             onchange="gPreferencesDialog.onTextboxChanged(event.target);"/>
+                </hbox>
+            </groupbox>
+            
+            <!-- Link Colors -->
+            <groupbox flex="1">
+                <caption label="&linkColors.groupLabel;"/>
+                <hbox align="center">
+                    <label accesskey="&colors.unvisited.accesskey;"
+                           control="colorsUnvisited">&colors.unvisited.label;</label>
+                    <spacer flex="1"/>
+                    <html:input id="colorsUnvisited"
+                                type="color"
+                                preference="pref-default_link_color"
+                                onchange="gPreferencesDialog.onColorChanged(event.target);"/>
+                    <textbox id="colorsUnvisitedTextbox"
+                             size="5"
+                             preference="pref-default_link_color"
+                             onchange="gPreferencesDialog.onTextboxChanged(event.target);"/>
+                </hbox>
+                <hbox align="center">
+                    <label accesskey="&colors.visited.accesskey;"
+                           control="colorsVisited">&colors.visited.label;</label>
+                    <spacer flex="1"/>
+                    <html:input id="colorsVisited"
+                                type="color"
+                                preference="pref-default_visited_color"
+                                onchange="gPreferencesDialog.onColorChanged(event.target);"/>
+                    <textbox id="colorsVisitedTextbox"
+                             size="5"
+                             preference="pref-default_visited_color"
+                             onchange="gPreferencesDialog.onTextboxChanged(event.target);"/>
+                </hbox>
+                <hbox align="center">
+                    <label accesskey="&colors.active.accesskey;"
+                           control="colorsActive">&colors.active.label;</label>
+                    <spacer flex="1"/>
+                    <html:input id="colorsActive"
+                                type="color"
+                                preference="pref-default_active_color"
+                                onchange="gPreferencesDialog.onColorChanged(event.target);"/>
+                    <textbox id="colorsActiveTextbox"
+                             size="5"
+                             preference="pref-default_active_color"
+                             onchange="gPreferencesDialog.onTextboxChanged(event.target);"/>
+                </hbox>
+            </groupbox>
+        </hbox>
+
+        <!-- Configured Pages -->
+        <groupbox>
+            <caption label="&configuredPages.groupLabel;"/>
+            <tree id="scopeTree"
+                  flex="1"
+                  style="height: 18em;"
+                  hidecolumnpicker="true"
+                  onkeypress="gPreferencesDialog.onTreeKeyPress(event)"
+                  onselect="gPreferencesDialog.onRowSelected();">
+                <treecols>
+                    <treecol id="siteCol"
+                             label="&treehead.siteName.label;"
+                             flex="3"
+                             persist="width"
+                             onclick="gPreferencesDialog.onColumnSorted(event);"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="methodCol"
+                             label="&treehead.method.label;"
+                             flex="1"
+                             persist="width"
+                             onclick="gPreferencesDialog.onColumnSorted(event);"/>
+                </treecols>
+                <treechildren/>
+            </tree>
+            <hbox class="actionButtons" align="left" flex="1">
+                <button id="removeRow" disabled="true"
+                        accesskey="&tree.removeRow.accesskey;"
+                        icon="remove" label="&tree.removeRow.label;"
+                        oncommand="gPreferencesDialog.onRowDeleted();"/>
+                <button id="removeAllRows"
+                        icon="clear" label="&tree.removeAllRows.label;"
+                        accesskey="&tree.removeAllRows.accesskey;"
+                        oncommand="gPreferencesDialog.onAllRowsDeleted();"/>
+            </hbox>
+        </groupbox>
+    </prefpane>
+</prefwindow>

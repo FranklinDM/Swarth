@@ -1,0 +1,313 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+const { classes: Cc, interfaces: Ci, results: Cr, utils: Cu } = Components;
+
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(
+    this,
+    "PrivateBrowsingUtils",
+    "resource://gre/modules/PrivateBrowsingUtils.jsm"
+);
+
+var Swarth = {
+    _scopePopulated: false,
+    _urls: null,
+
+    currentScope: null,
+    selectedScope: null,
+    
+    get isBrowserPrivate () {
+        if (Swarth.prefs.branch.getBoolPref("keep_private_browsing_scope")) {
+            return false;
+        }
+        return PrivateBrowsingUtils.isBrowserPrivate(gBrowser.mCurrentBrowser);
+    },
+    
+    get currentMethod () {
+        return Swarth.ssm.getMethod(Swarth.currentScope, Swarth.isBrowserPrivate);
+    },
+    
+    onLoad: function () {
+        Swarth.ssm.init();
+        Swarth.prefs.init();
+        gBrowser.addProgressListener(Swarth.pageHandler);
+        Swarth.observer.register();
+    },
+
+    onUnload: function () {
+        gBrowser.removeProgressListener(Swarth.pageHandler);
+        Swarth.observer.unregister();
+    },
+    
+    onScopeSelected: function (aEvent) {
+        let selectedURL = aEvent.target.value;
+        Swarth.selectedScope = selectedURL;
+        Swarth.adjustMethodMenuItems();
+    },
+    
+    onMethodSelected: function (aEvent) {
+        let methodID = parseInt(aEvent.target.value);
+        Swarth.ssm.setMethod(Swarth.selectedScope, methodID, Swarth.isBrowserPrivate);
+    },
+
+    onPopupShowing: function (aEvent) {
+        // Don't handle events for submenus
+        if (aEvent.target != aEvent.currentTarget) {
+            return;
+        }
+        let enabledMenuItem = document.getElementById("menu_swEnabled");
+        enabledMenuItem.setAttribute("checked", Swarth.prefs.enabled);
+        if (!Swarth._scopePopulated) {
+            var scopePopup = document.getElementById("menu_swScopePopup");
+            for (let i = scopePopup.childNodes.length - 1; i >= 0; i--) {
+                let deadItem = scopePopup.childNodes[i];
+                scopePopup.removeChild(deadItem);
+            }
+            let urlIndex = 0;
+            Swarth._urls.forEach(function (url) {
+                let menuItem = document.createElement("menuitem");
+                menuItem.setAttribute("id", "menu_swScopePart" + urlIndex);
+                menuItem.setAttribute("type", "radio");
+                menuItem.setAttribute("name", "scope");
+                menuItem.setAttribute("label", url);
+                menuItem.setAttribute("value", url);
+                menuItem.setAttribute("closemenu", "single");
+                menuItem.setAttribute("oncommand", "Swarth.onScopeSelected(event);");
+                if (Swarth.selectedScope == url) {
+                    menuItem.setAttribute("checked", "true");
+                }
+                scopePopup.appendChild(menuItem);
+                urlIndex++;
+            });
+            Swarth._scopePopulated = true;
+            Swarth.adjustMethodMenuItems();
+        }
+    },
+
+    openPreferences: function () {
+        openDialog(
+            "chrome://swarth/content/preferences.xul",
+            "_blank",
+            "chrome,modal,titlebar,centerscreen",
+            window
+        );
+    },
+
+    adjustMethodMenuItems: function () {
+        var methodID = Swarth.ssm.getMethod(Swarth.selectedScope, Swarth.isBrowserPrivate);
+        var menuItem = null;
+        switch (methodID) {
+            case Swarth.ssm.kMethodDisabled:
+                menuItem = document.getElementById("menu_swRetainStyle");
+                break;
+            case Swarth.ssm.kMethodCSSProcessor:
+                menuItem = document.getElementById("menu_swUseCSSProcessor");
+                break;
+            case Swarth.ssm.kMethodCSSSimple:
+                menuItem = document.getElementById("menu_swUseCSSSimple");
+                break;
+            case Swarth.ssm.kMethodColorInversion:
+                menuItem = document.getElementById("menu_swUseColorInversion");
+                break;
+            default:
+            case Swarth.ssm.kMethodDefault:
+                menuItem = document.getElementById("menu_swUseDefault");
+                break;
+        }
+        menuItem.setAttribute("checked", "true");
+    },
+    
+    resetScope: function () {
+        Swarth._scopePopulated = false;
+        Swarth.currentScope = null;
+        let currentURI = gBrowser.mCurrentBrowser.currentURI.cloneIgnoringRef();
+        Swarth._urls = Swarth.generateHierarchy(currentURI);
+        Swarth.updateCurrentScope();
+        Swarth.selectedScope = Swarth.currentScope;
+    },
+    
+    updateCurrentScope: function () {
+        if (Swarth._urls == null) {
+            return;
+        }
+        Swarth._urls.forEach(function (url) {
+            let methodID = Swarth.ssm.getMethod(url, Swarth.isBrowserPrivate);
+            if (methodID != Swarth.ssm.kMethodDefault) {
+                Swarth.currentScope = url;
+            }
+        });
+        // Use the base domain as the default scope
+        if (Swarth.currentScope == null) {
+            Swarth.currentScope = Swarth._urls.keys().next().value;
+        }
+    },
+
+    generateHierarchy: function (aURI) {
+        var urls = new Set();
+        var hosts = [];
+        var prePath = aURI.prePath;
+        var hasAuthority = /(https|http|ftp|gopher)/i.test(aURI.scheme);
+        if (hasAuthority) {
+            try {
+                prePath = aURI.hostPort.replace("www.", "");
+                // Get the base domain with eTLD (used to check if this is an IP)
+                var baseDomain = Services.eTLD.getBaseDomain(aURI);
+                var hostParts = prePath.split(".");
+                baseDomain = hostParts.slice(-2).join(".");
+                for (let i = 0; i < hostParts.length - 2; i++) {
+                    let currentHost = hostParts[i];
+                    for (let j = i + 1; j < hostParts.length - 2; j++) {
+                        currentHost += "." + hostParts[j];
+                    }
+                    currentHost += "." + baseDomain;
+                    hosts.push(currentHost);
+                }
+                hosts.push(baseDomain);
+            } catch (e) {}
+        } else {
+            hosts.push(prePath);
+        }
+        for (let i = hosts.length - 1; i >= 0; i--) {
+            urls.add(hosts[i]);
+        }
+        var pathName = aURI
+                       .filePath
+                       .replace(/\/+$/, "")      // Strip trailing forward slashes
+                       .replace("//", "%2F%2F"); // Escape double slash inside path names
+        var pathSegments = pathName.split("/");
+        for (let i = 0; i < pathSegments.length; i++) {
+            var currentURL = prePath;
+            if (pathSegments[i] != "") {
+                for (let depth = 0; depth <= i; depth++) {
+                    let currentSegment = pathSegments[depth];
+                    if (depth > 0) {
+                        currentURL += "/";
+                    }
+                    currentURL += currentSegment.replace("%2F%2F", "//");
+                }
+            }
+            if (!urls.has(currentURL)) {
+                urls.add(currentURL);
+            }
+        }
+        return urls;
+    },
+};
+
+this.Swarth.pageHandler = {
+    QueryInterface: XPCOMUtils.generateQI(
+        ["nsIWebProgressListener", "nsISupportsWeakReference"]
+    ),
+
+    onStateChange: function (aWebProgress, aRequest, aStateFlags, aStatus) {
+        if (!aRequest) {
+            return;
+        }
+
+        let domWindow = aWebProgress.DOMWindow;
+        if (aStateFlags & Ci.nsIWebProgressListener.STATE_STOP &&
+            !Swarth.ssm.windowState.has(domWindow)) {
+            Swarth.ssm.update(
+                {
+                    window: domWindow,
+                    method: Swarth.currentMethod,
+                    isTopLevel: aWebProgress.isTopLevel
+                },
+                Swarth.prefs.getAll()
+            );
+        }
+    },
+
+    onLocationChange: function (aWebProgress, aRequest, aLocationURI, aFlags) {
+        if (aFlags & Ci.nsIWebProgressListener.LOCATION_CHANGE_SAME_DOCUMENT) {
+            return;
+        }
+
+        let isTopLevel = aWebProgress.isTopLevel;
+        if (isTopLevel) {
+            Swarth.resetScope();
+        }
+
+        if (aRequest) {
+            Swarth.ssm.update(
+                {
+                    window: aWebProgress.DOMWindow,
+                    method: Swarth.currentMethod,
+                    isTopLevel: isTopLevel
+                },
+                Swarth.prefs.getAll()
+            );
+        } else {
+            Swarth.ssm.updateDocShell(
+                {
+                    docShell: aWebProgress,
+                    method: Swarth.currentMethod,
+                },
+                Swarth.prefs.getAll()
+            );
+        }
+    },
+};
+
+this.Swarth.observer = {
+    kObserverTopics: [
+        "swm-state-changed",
+        "dom-window-destroyed"
+    ],
+
+    observe: function (aSubject, aTopic, aData) {
+        switch (aTopic) {
+            case "swm-state-changed":
+                if (aData == "scope-updated") {
+                    Swarth.updateCurrentScope();
+                    Swarth.adjustMethodMenuItems();
+                }
+
+                Swarth.ssm.updateDocShell(
+                    {
+                        docShell: gBrowser.mCurrentBrowser.docShell,
+                        method: Swarth.currentMethod,
+                        invalidate: (aData == "invalidate")
+                    },
+                    Swarth.prefs.getAll()
+                );
+
+                break;
+            case "dom-window-destroyed":
+                Swarth.ssm.remove(aSubject, true);
+                break;
+        }
+    },
+
+    register: function () {
+        for (let i = 0; i < this.kObserverTopics.length; i++) {
+            Services.obs.addObserver(this, this.kObserverTopics[i], false);
+        }
+    },
+
+    unregister: function () {
+        for (let i = 0; i < this.kObserverTopics.length; i++) {
+            Services.obs.removeObserver(this, this.kObserverTopics[i]);
+        }
+    },
+};
+
+XPCOMUtils.defineLazyModuleGetter(
+    Swarth,
+    "ssm",
+    "chrome://swarth/content/modules/StylesheetManager.jsm",
+    "StylesheetManager"
+);
+XPCOMUtils.defineLazyModuleGetter(
+    Swarth,
+    "prefs",
+    "chrome://swarth/content/modules/Preferences.jsm",
+    "Preferences"
+);
+
+window.addEventListener("load", Swarth.onLoad, false);
+window.addEventListener("unload", Swarth.onUnload, false);

@@ -1,0 +1,11 @@
+pref("extensions.swarth@franklindm.description", "chrome://swarth/locale/main.properties");
+pref("extensions.swarth.enabled", true);
+pref("extensions.swarth.follow_preferred_color_scheme", false);
+pref("extensions.swarth.keep_private_browsing_scope", false);
+pref("extensions.swarth.default_active_color", "#ff0000");
+pref("extensions.swarth.default_background_color", "#000000");
+pref("extensions.swarth.default_foreground_color", "#ffffff");
+pref("extensions.swarth.default_link_color", "#7fd7ff");
+pref("extensions.swarth.default_method", 1);
+pref("extensions.swarth.default_selection_color", "#8080ff");
+pref("extensions.swarth.default_visited_color", "#ffafff");

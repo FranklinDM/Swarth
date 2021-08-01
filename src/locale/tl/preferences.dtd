@@ -1,0 +1,54 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!ENTITY  prefWindow.title              "Mga Preperensiya ng Swarth">
+<!ENTITY  resetAll.label                "Ibalik sa dati">
+
+<!-- General -->
+<!ENTITY  general.groupLabel            "Pangkalahatan">
+
+<!ENTITY  globalEnable.label            "Paganahin ang Swarth">
+<!ENTITY  globalEnable.accesskey        "P">
+<!ENTITY  followColorScheme.label       "Sundin ang paunang-tukoy na kombinasyon ng kulay ng pahina sa web">
+<!ENTITY  followColorScheme.accesskey   "u">
+<!ENTITY  keepPrivateScope.label        "Panatilihin ang mga pagbabago sa pribadong pagba-browse">
+<!ENTITY  keepPrivateScope.accesskey    "g">
+
+<!ENTITY  method.default.label          "Paunang-tukoy na paraan:">
+<!ENTITY  method.default.accesskey      "y">
+<!ENTITY  method.retainPageStyle.label  "Panatilihin ang estilo ng pahina">
+<!ENTITY  method.cssProcessor.label     "Stylesheet processor">
+<!ENTITY  method.cssSimple.label        "Simple stylesheet">
+<!ENTITY  method.colorInversion.label   "Color inversion">
+
+<!-- Main Colors -->
+<!ENTITY  mainColors.groupLabel         "Mga Pangunahing Kulay">
+
+<!ENTITY  colors.foreground.label       "Teksto:">
+<!ENTITY  colors.foreground.accesskey   "o">
+<!ENTITY  colors.background.label       "Paligid:">
+<!ENTITY  colors.background.accesskey   "d">
+<!ENTITY  colors.selection.label        "Seleksiyon:">
+<!ENTITY  colors.selection.accesskey    "S">
+
+<!-- Link Colors -->
+<!ENTITY  linkColors.groupLabel         "Kulay ng mga Kawing">
+
+<!ENTITY  colors.unvisited.label        "Di pa nabibisitang mga Kawing:">
+<!ENTITY  colors.unvisited.accesskey    "i">
+<!ENTITY  colors.visited.label          "Nabisitang mga Kawing:">
+<!ENTITY  colors.visited.accesskey      "w">
+<!ENTITY  colors.active.label           "Aktibong mga Kawing:">
+<!ENTITY  colors.active.accesskey       "k">
+
+<!-- Configured pages -->
+<!ENTITY  configuredPages.groupLabel    "Mga Pahinang Kaugnay">
+
+<!ENTITY  treehead.siteName.label       "Site">
+<!ENTITY  treehead.method.label         "Paraan">
+
+<!ENTITY  tree.removeRow.label          "Alisin ang scope">
+<!ENTITY  tree.removeRow.accesskey      "A">
+<!ENTITY  tree.removeAllRows.label      "Alisin lahat ng scope">
+<!ENTITY  tree.removeAllRows.accesskey  "l">

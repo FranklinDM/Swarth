@@ -1,0 +1,54 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!ENTITY  prefWindow.title              "Swarth Preferences">
+<!ENTITY  resetAll.label                "Reset All">
+
+<!-- General -->
+<!ENTITY  general.groupLabel            "General">
+
+<!ENTITY  globalEnable.label            "Enable Swarth">
+<!ENTITY  globalEnable.accesskey        "n">
+<!ENTITY  followColorScheme.label       "Follow preferred color scheme">
+<!ENTITY  followColorScheme.accesskey   "P">
+<!ENTITY  keepPrivateScope.label        "Keep scope changes in private browsing mode">
+<!ENTITY  keepPrivateScope.accesskey    "K">
+
+<!ENTITY  method.default.label          "Default color method:">
+<!ENTITY  method.default.accesskey      "m">
+<!ENTITY  method.retainPageStyle.label  "Retain page style">
+<!ENTITY  method.cssProcessor.label     "Stylesheet processor">
+<!ENTITY  method.cssSimple.label        "Simple stylesheet">
+<!ENTITY  method.colorInversion.label   "Color inversion">
+
+<!-- Main Colors -->
+<!ENTITY  mainColors.groupLabel         "Main Colors">
+
+<!ENTITY  colors.foreground.label       "Foreground:">
+<!ENTITY  colors.foreground.accesskey   "F">
+<!ENTITY  colors.background.label       "Background:">
+<!ENTITY  colors.background.accesskey   "B">
+<!ENTITY  colors.selection.label        "Selection:">
+<!ENTITY  colors.selection.accesskey    "S">
+
+<!-- Link Colors -->
+<!ENTITY  linkColors.groupLabel         "Link Colors">
+
+<!ENTITY  colors.unvisited.label        "Unvisited Links:">
+<!ENTITY  colors.unvisited.accesskey    "U">
+<!ENTITY  colors.visited.label          "Visited Links:">
+<!ENTITY  colors.visited.accesskey      "V">
+<!ENTITY  colors.active.label           "Active Links:">
+<!ENTITY  colors.active.accesskey       "A">
+
+<!-- Configured pages -->
+<!ENTITY  configuredPages.groupLabel    "Configured Pages">
+
+<!ENTITY  treehead.siteName.label       "Site">
+<!ENTITY  treehead.method.label         "Method">
+
+<!ENTITY  tree.removeRow.label          "Remove scope">
+<!ENTITY  tree.removeRow.accesskey      "R">
+<!ENTITY  tree.removeAllRows.label      "Remove all scopes">
+<!ENTITY  tree.removeAllRows.accesskey  "e">

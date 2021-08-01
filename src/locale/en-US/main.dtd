@@ -1,0 +1,16 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!ENTITY  button.swarth.label           "Swarth">
+<!ENTITY  button.swarth.tooltip         "Configure web page color scheme handling">
+
+<!ENTITY  menu.swarthEnabled.label      "Enabled">
+<!ENTITY  menu.swarthPrefs.label        "Swarth Preferences">
+<!ENTITY  menu.scope.label              "Scope">
+
+<!ENTITY  menu.useDefaultMethod.label   "Use default method">
+<!ENTITY  menu.retainPageStyle.label    "Retain page style">
+<!ENTITY  menu.cssProcessor.label       "Use stylesheet processor">
+<!ENTITY  menu.cssSimple.label          "Use simple stylesheet">
+<!ENTITY  menu.colorInversion.label     "Use color inversion">

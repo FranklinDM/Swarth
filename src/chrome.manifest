@@ -1,0 +1,17 @@
+#------------------------------------------------------------------------------
+# Package registration
+#------------------------------------------------------------------------------
+
+content     swarth               content/          contentaccessible=yes
+
+skin        swarth     global    skin/
+
+locale      swarth     en-US     locale/en-US/
+locale      swarth     tl        locale/tl/
+
+#------------------------------------------------------------------------------
+# Overlays
+#------------------------------------------------------------------------------
+
+overlay     chrome://browser/content/browser.xul            chrome://swarth/content/browserOverlay.xul
+style       chrome://global/content/customizeToolbar.xul    chrome://swarth/skin/overlay.css

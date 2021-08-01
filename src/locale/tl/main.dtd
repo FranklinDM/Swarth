@@ -1,0 +1,16 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!ENTITY  button.swarth.label           "Swarth">
+<!ENTITY  button.swarth.tooltip         "Baguhin ang pangangasiwa sa kulay ng mga pahina">
+
+<!ENTITY  menu.swarthEnabled.label      "Paganahin">
+<!ENTITY  menu.swarthPrefs.label        "Mga Preperensiya">
+<!ENTITY  menu.scope.label              "Scope">
+
+<!ENTITY  menu.useDefaultMethod.label   "Gamitin ang paunang-tukoy">
+<!ENTITY  menu.retainPageStyle.label    "Panatilihin ang estilo ng pahina">
+<!ENTITY  menu.cssProcessor.label       "Gamitin ang stylesheet processor">
+<!ENTITY  menu.cssSimple.label          "Gamitin ang simple stylesheet">
+<!ENTITY  menu.colorInversion.label     "Gamitin ang color inversion">
