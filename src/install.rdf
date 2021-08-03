@@ -9,6 +9,7 @@
         <em:creator>FranklinDM</em:creator>
         <em:contributor>Mikhail Khvoinitsky (Dark Background and Light Text)</em:contributor>
         <em:homepageURL>https://franklindm.github.io/</em:homepageURL>
+        <em:optionsURL>chrome://swarth/content/preferences.xul</em:optionsURL>
 
         <!-- Target applications -->
         <em:targetApplication>
