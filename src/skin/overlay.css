@@ -3,9 +3,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #swarth-button .toolbarbutton-icon {
-  list-style-image: url("chrome://swarth/skin/toolbar-icon.png");
+  list-style-image: url("chrome://swarth/skin/toolbar-icon.svg");
 }
 
 toolbar[iconsize="small"] #swarth-button .toolbarbutton-icon {
-  list-style-image: url("chrome://swarth/skin/toolbar-icon-small.png");
+  -moz-image-region: rect(0, 16px, 16px, 0);
+}
+
+toolbar[iconsize="large"] #swarth-button .toolbarbutton-icon {
+  -moz-image-region: rect(0, 24px, 24px, 0);
+}
+
+toolbar[brighttext] #swarth-button .toolbarbutton-icon {
+  list-style-image: url("chrome://swarth/skin/toolbar-icon-inverted.svg");
 }
