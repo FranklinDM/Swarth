@@ -97,6 +97,7 @@ var StylesheetManager = {
                 break;
             default:
             case this.kMethodColorInversion:
+                StylesheetManagerInternal._setMarkers(aWindow);
                 sheetURIs = [
                     StylesheetManagerInternal.getStylesheet(
                         kSheetInvertKey, aOptions, invalidateCache)
@@ -119,7 +120,6 @@ var StylesheetManager = {
                 stylesheets: sheetURIs,
                 processor: processorInstance,
                 document: Cu.getWeakReference(aWindow.document),
-                markers: false
             }
         );
         updatedWindows.add(aWindow);
