@@ -4,14 +4,11 @@
 
 #swarth-button .toolbarbutton-icon {
   list-style-image: url("chrome://swarth/skin/toolbar-icon.svg");
+  -moz-image-region: rect(0, 24px, 24px, 0);
 }
 
 toolbar[iconsize="small"] #swarth-button .toolbarbutton-icon {
   -moz-image-region: rect(0, 16px, 16px, 0);
-}
-
-toolbar[iconsize="large"] #swarth-button .toolbarbutton-icon {
-  -moz-image-region: rect(0, 24px, 24px, 0);
 }
 
 toolbar[brighttext] #swarth-button .toolbarbutton-icon {
