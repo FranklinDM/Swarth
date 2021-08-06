@@ -13,5 +13,15 @@ locale      swarth     tl        locale/tl/
 # Overlays
 #------------------------------------------------------------------------------
 
-overlay     chrome://browser/content/browser.xul            chrome://swarth/content/browserOverlay.xul
 style       chrome://global/content/customizeToolbar.xul    chrome://swarth/skin/overlay.css
+
+#------------------------------------------------------------------------------
+# Application-specific
+#------------------------------------------------------------------------------
+
+# Pale Moon
+overlay     chrome://browser/content/browser.xul         chrome://swarth/content/browserOverlay.xul       application={8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}
+# Basilisk
+overlay     chrome://browser/content/browser.xul         chrome://swarth/content/browserOverlay.xul       application={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
+# Borealis Navigator
+overlay     chrome://navigator/content/navigator.xul     chrome://swarth/content/browserOverlay.xul       application={a3210b97-8e8a-4737-9aa0-aa0e607640b9}

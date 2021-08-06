@@ -29,6 +29,14 @@
                 <em:basilisk>true</em:basilisk>
             </Description>
         </em:targetApplication>
+        <em:targetApplication>
+            <!-- Borealis Navigator -->
+            <Description>
+                <em:id>{a3210b97-8e8a-4737-9aa0-aa0e607640b9}</em:id>
+                <em:minVersion>0.9.0a1</em:minVersion>
+                <em:maxVersion>0.9.*</em:maxVersion>
+            </Description>
+        </em:targetApplication>
 
         <!-- Localized add-on metadata -->
         <em:localized>
