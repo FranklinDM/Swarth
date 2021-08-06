@@ -8,6 +8,7 @@ const { classes: Cc, interfaces: Ci, results: Cr, utils: Cu } = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Timer.jsm");
+Cu.import("resource://gre/modules/Console.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(
     this,
@@ -600,33 +601,13 @@ class StylesheetColorProcessor extends StylesheetProcessorAbstract {
                 return ['none'];
             } else if (intersect(do_not_remove_background_image, [url, selector])) {
                 return ['url("' + url + '")', true];
-            } else if ( // no-repeat combined with exact bg position is most likely sprite
-                (bg_repeat === 'no-repeat' || bg_repeat === 'no-repeat no-repeat') &&
-                ((bg_position.match(/px/g) || []).length === 2)
+            } else if ( // allow images with no-repeat set as their position
+                bg_repeat === 'no-repeat' || bg_repeat === 'no-repeat no-repeat'
             ) {
                 return ['url("' + url + '")', true];
             } else {
                 return ['none'];
-            } /*
-             if (url.indexOf('data:') != 0) {
-             if (intersect(remove_background_image, [url, selector])) {
-             return ['none'];
-             } else if (intersect(do_not_remove_background_image, [url, selector])) {
-             if (bg_repeat == 'repeat' || bg_repeat == 'repeat repeat')
-             return ['url("' + url + '")', true];
-             else
-             return ['url("' + url + '")', true]
-             } else if (bg_repeat == 'no-repeat' || bg_repeat == 'no-repeat no-repeat')
-             return ['none']; // ['url("' + url + '")', true];
-             else
-             return ['none'];
-             } else { // data:
-             if (bg_repeat == 'no-repeat' || bg_repeat == 'no-repeat no-repeat') {
-             return ['url("' + url + '")', true];
-             } else {
-             return ['none'];
-             }
-             }  */
+            }
         } else if (bg_image.indexOf('gradient') < bg_image.indexOf('(')) {
             let open_bracket_i = bg_image.indexOf('(');
             let close_bracket_i = bg_image.lastIndexOf(')');
