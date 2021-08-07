@@ -19,7 +19,7 @@ var Swarth = {
 
     currentScope: null,
     selectedScope: null,
-    
+
     get isBrowserPrivate () {
         if (Swarth.prefs.branch.getBoolPref("keep_private_browsing_scope")) {
             return false;
@@ -35,11 +35,13 @@ var Swarth = {
         Swarth.ssm.init();
         Swarth.prefs.init();
         gBrowser.addProgressListener(Swarth.pageHandler);
+        gBrowser.addEventListener("pageshow", Swarth.pageHandler.onPageShow, false);
         Swarth.observer.register();
     },
 
     onUnload: function () {
         gBrowser.removeProgressListener(Swarth.pageHandler);
+        gBrowser.removeEventListener("pageshow", Swarth.pageHandler.onPageShow);
         Swarth.observer.unregister();
     },
     
@@ -196,6 +198,21 @@ var Swarth = {
         }
         return urls;
     },
+
+    _updateDocShell: function (aDocShell, aInvalidate) {
+        if (aDocShell == null) {
+            aDocShell = gBrowser.mCurrentBrowser.docShell;
+        }
+
+        return Swarth.ssm.updateDocShell(
+            {
+                docShell: aDocShell,
+                method: Swarth.currentMethod,
+                invalidate: aInvalidate,
+            },
+            Swarth.prefs.getAll()
+        );
+    },
 };
 
 this.Swarth.pageHandler = {
@@ -242,14 +259,12 @@ this.Swarth.pageHandler = {
                 Swarth.prefs.getAll()
             );
         } else {
-            Swarth.ssm.updateDocShell(
-                {
-                    docShell: aWebProgress,
-                    method: Swarth.currentMethod,
-                },
-                Swarth.prefs.getAll()
-            );
+            Swarth._updateDocShell(aWebProgress);
         }
+    },
+
+    onPageShow: function (aEvent) {
+        Swarth._updateDocShell(null);
     },
 };
 
@@ -267,13 +282,9 @@ this.Swarth.observer = {
                     Swarth.adjustMethodMenuItems();
                 }
 
-                Swarth.ssm.updateDocShell(
-                    {
-                        docShell: gBrowser.mCurrentBrowser.docShell,
-                        method: Swarth.currentMethod,
-                        invalidate: (aData == "invalidate")
-                    },
-                    Swarth.prefs.getAll()
+                Swarth._updateDocShell(
+                    null,
+                    (aData == "invalidate")
                 );
 
                 break;
