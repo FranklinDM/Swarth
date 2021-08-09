@@ -15,7 +15,9 @@
     <!-- Commands -->
     <commandset id="mainCommandSet">
         <command id="Swarth:ToggleEnabled"
-                 oncommand="Swarth.prefs.toggleEnabled();" />
+                 oncommand="Swarth.prefs.toggleEnabled();"/>
+        <command id="Swarth:OpenPreferences"
+                 oncommand="Swarth.openPreferences();"/>
     </commandset>
 
     <!-- Toolbar Buttons -->
@@ -33,7 +35,7 @@
                           command="Swarth:ToggleEnabled" />
                 <menuitem id="menu_swOpenPreferences"
                           label="&menu.swarthPrefs.label;"
-                          oncommand="Swarth.openPreferences();" />
+                          command="Swarth:OpenPreferences" />
                 <menuseparator/>
                 <menu id="menu_swScope" label="&menu.scope.label;">
                     <menupopup id="menu_swScopePopup"/>
