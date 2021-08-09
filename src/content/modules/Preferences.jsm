@@ -12,6 +12,7 @@ const kPrefersColorSchemePref = "browser.display.prefers_color_scheme";
 const kUIColorSchemePref = "ui.color_scheme";
 const kQuitObserverTopic = "quit-application";
 const kEnabledPref = "enabled";
+const kActionPref = "toolbar_action";
 
 var Preferences = {
     branch: Services.prefs.getBranch("extensions.swarth."),
@@ -147,5 +148,9 @@ var Preferences = {
 
     set enabled (aValue) {
         this.branch.setBoolPref(kEnabledPref, aValue);
+    },
+    
+    get toolbarAction () {
+        return this.branch.getIntPref(kActionPref);
     },
 };

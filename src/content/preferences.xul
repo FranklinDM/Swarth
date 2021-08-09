@@ -25,6 +25,9 @@
             <preference id="pref-enabled"
                         name="extensions.swarth.enabled"
                         type="bool"/>
+            <preference id="pref-toolbar_action"
+                        name="extensions.swarth.toolbar_action"
+                        type="int"/>
             <preference id="pref-follow_preferred_color_scheme"
                         name="extensions.swarth.follow_preferred_color_scheme"
                         type="bool"/>
@@ -88,6 +91,31 @@
                         <menuitem id="method-3"
                                   value="3"
                                   label="&method.colorInversion.label;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+            <hbox align="center">
+                <label accesskey="&tbAction.control.accesskey;"
+                       control="tbAction">&tbAction.control.label;</label>
+                <menulist id="tbAction"
+                          flex="1"
+                          preference="pref-toolbar_action">
+                    <menupopup>
+                        <menuitem id="tbAction-0"
+                                  value="0"
+                                  label="&tbAction.toggleEnabled.label;"/>
+                        <menuitem id="tbAction-1"
+                                  value="1"
+                                  label="&tbAction.toggleInherit.label;"/>
+<!--                         <menuitem id="tbAction-2"
+                                  value="2"
+                                  label="&tbAction.toggleDefault.label;"/> -->
+                        <menuitem id="tbAction-3"
+                                  value="3"
+                                  label="&tbAction.openPrefs.label;"/>
+<!--                         <menuitem id="tbAction-4"
+                                  value="4"
+                                  label="&tbAction.openConfPages.label;"/> -->
                     </menupopup>
                 </menulist>
             </hbox>

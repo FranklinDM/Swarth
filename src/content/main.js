@@ -51,8 +51,10 @@ var Swarth = {
         Swarth.adjustMethodMenuItems();
     },
     
-    onMethodSelected: function (aEvent) {
-        let methodID = parseInt(aEvent.target.value);
+    onMethodSelected: function (aEvent, aMethodID) {
+        let methodID = aMethodID !== undefined ?
+                                     aMethodID :
+                                     parseInt(aEvent.target.value);
         Swarth.ssm.setMethod(Swarth.selectedScope, methodID, Swarth.isBrowserPrivate);
     },
 
@@ -87,6 +89,38 @@ var Swarth = {
             });
             Swarth._scopePopulated = true;
             Swarth.adjustMethodMenuItems();
+        }
+    },
+
+    onCommand: function (aEvent) {
+        let commandElement = document.getElementById("Swarth:HandleButton");
+        if (aEvent.target != commandElement) {
+            return;
+        }
+
+        let toolbarAction = Swarth.prefs.toolbarAction;
+        switch (toolbarAction) {
+            default:
+            case 0:
+                Swarth.prefs.toggleEnabled();
+                break;
+            case 1:
+                let method = Swarth.ssm.getMethod(Swarth.selectedScope, Swarth.isBrowserPrivate);
+                if (method == Swarth.ssm.kMethodDisabled) {
+                    Swarth.onMethodSelected(null, Swarth.ssm.kMethodDefault);
+                } else {
+                    Swarth.onMethodSelected(null, Swarth.ssm.kMethodDisabled);
+                }
+                break;
+            case 2:
+                // reserved (toggle between real default)
+                break;
+            case 3:
+                Swarth.openPreferences();
+                break;
+            case 4:
+                // reserved (open configured pages)
+                break;
         }
     },
 

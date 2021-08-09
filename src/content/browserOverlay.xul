@@ -18,15 +18,18 @@
                  oncommand="Swarth.prefs.toggleEnabled();"/>
         <command id="Swarth:OpenPreferences"
                  oncommand="Swarth.openPreferences();"/>
+        <command id="Swarth:HandleButton"
+                 oncommand="Swarth.onCommand(event);"/>
     </commandset>
 
     <!-- Toolbar Buttons -->
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton id="swarth-button"
                        class="toolbarbutton-1 chromeclass-toolbar-additional"
-                       type="menu"
+                       type="menu-button"
                        label="&button.swarth.label;"
-                       tooltiptext="&button.swarth.tooltip;">
+                       tooltiptext="&button.swarth.tooltip;"
+                       command="Swarth:HandleButton">
             <menupopup id="menu_swPopup"
                        onpopupshowing="Swarth.onPopupShowing(event);">
                 <menuitem id="menu_swEnabled"

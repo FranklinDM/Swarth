@@ -15,6 +15,14 @@
 <!ENTITY  keepPrivateScope.label        "Keep scope changes in private browsing mode">
 <!ENTITY  keepPrivateScope.accesskey    "K">
 
+<!ENTITY  tbAction.control.label        "Toolbar button action:">
+<!ENTITY  tbAction.control.accesskey    "T">
+<!ENTITY  tbAction.toggleEnabled.label  "Toggle extension enabled state">
+<!ENTITY  tbAction.toggleInherit.label  "Switch: inherited method and retain page style">
+<!ENTITY  tbAction.toggleDefault.label  "Switch: default method and retain page style">
+<!ENTITY  tbAction.openPrefs.label      "Open Preferences dialog">
+<!ENTITY  tbAction.openConfPages.label  "Open Configured Pages dialog">
+
 <!ENTITY  method.default.label          "Default color method:">
 <!ENTITY  method.default.accesskey      "m">
 <!ENTITY  method.retainPageStyle.label  "Retain page style">
