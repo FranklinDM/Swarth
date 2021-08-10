@@ -5,10 +5,16 @@
 const { classes: Cc, interfaces: Ci, results: Cr, utils: Cu } = Components;
 
 Cu.import("chrome://swarth/content/modules/StylesheetManager.jsm");
-Cu.import("chrome://swarth/content/modules/Preferences.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-var gScopes = Object.entries(ScopeConfig.data);
+XPCOMUtils.defineLazyModuleGetter(
+    this,
+    "JSONFile",
+    "resource://gre/modules/JSONFile.jsm"
+);
+
+var gScopes = null;
 var modifiedScopes = new Map();
 
 var gScopeDialog = {
@@ -180,6 +186,8 @@ var gScopeDialog = {
         this._siteField = document.getElementById("urlTextbox");
         this._methodMenu = document.getElementById("scopeMethodMenu");
         this._tree = document.getElementById("scopeTree");
+
+        gScopes = Object.entries(ScopeConfig.data);
         this._view.rowCount = gScopes.length;
         this._tree.view = this._view;
         this.onRowSelected();
@@ -268,5 +276,62 @@ var gScopeDialog = {
         }
         document.getElementById("removeRow").disabled = true;
         document.getElementById("removeAllRows").disabled = true;
+    },
+
+    _getFilePicker: function (aSave) {
+        let mode = aSave ?
+                   Ci.nsIFilePicker.modeSave :
+                   Ci.nsIFilePicker.modeOpen;
+
+        var filePicker = Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
+        filePicker.init(window, null, mode);
+        filePicker.appendFilter("JSON Files", "*.json; *.jsonp;");
+        filePicker.appendFilters(Ci.nsIFilePicker.filterText);
+        filePicker.appendFilters(Ci.nsIFilePicker.filterAll);
+        filePicker.filterIndex = 0;
+
+        return filePicker;
+    },
+
+    _tryLoad: function (aPath) {
+        var tempFile = new JSONFile({ path: aPath });
+        try {
+            tempFile.ensureDataReady();
+        } catch (e) {
+            return false;
+        }
+        return tempFile;
+    },
+
+    onImport: function () {
+        let filePicker = this._getFilePicker(false);
+        let result = filePicker.show();
+        if (result != Ci.nsIFilePicker.returnCancel) {
+            let srcFile = this._tryLoad(filePicker.file.path);
+            if (srcFile) {
+                this.onAllRowsDeleted();
+                gScopes = Object.entries(srcFile.data);
+                this._tree.treeBoxObject.rowCountChanged(0, gScopes.length);
+                this._view.rowCount = gScopes.length;
+                for (let i = 0; i < gScopes.length; ++i) {
+                    let scope = gScopes[i];
+                    modifiedScopes.set(scope[0], scope[1]);
+                }
+            }
+        }
+    },
+
+    onExport: function () {
+        let filePicker = this._getFilePicker(true);
+        let result = filePicker.show();
+        if (result != Ci.nsIFilePicker.returnCancel) {
+            let destFile = this._tryLoad(filePicker.file.path);
+            if (destFile) {
+                destFile._data = Object.fromEntries(gScopes);
+                destFile.saveSoon();
+                return true;
+            }
+            return false;
+        }
     },
 };

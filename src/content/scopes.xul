@@ -100,5 +100,17 @@
                     accesskey="&removeAllRows.accesskey;"
                     oncommand="gScopeDialog.onAllRowsDeleted();"/>
         </hbox>
+        <hbox class="dataButtons"
+              align="right"
+              flex="1">
+            <button id="importData"
+                    label="&importData.label;"
+                    accesskey="&importData.accesskey;"
+                    oncommand="gScopeDialog.onImport();"/>
+            <button id="exportData"
+                    label="&exportData.label;"
+                    accesskey="&exportData.accesskey;"
+                    oncommand="gScopeDialog.onExport();"/>
+        </hbox>
     </hbox>
 </dialog>
