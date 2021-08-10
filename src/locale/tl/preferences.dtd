@@ -51,12 +51,5 @@
 <!ENTITY  colors.active.accesskey       "k">
 
 <!-- Configured pages -->
-<!ENTITY  configuredPages.groupLabel    "Mga Pahinang Kaugnay">
-
-<!ENTITY  treehead.siteName.label       "Site">
-<!ENTITY  treehead.method.label         "Paraan">
-
-<!ENTITY  tree.removeRow.label          "Alisin ang scope">
-<!ENTITY  tree.removeRow.accesskey      "A">
-<!ENTITY  tree.removeAllRows.label      "Alisin lahat ng scope">
-<!ENTITY  tree.removeAllRows.accesskey  "l">
+<!ENTITY  openScopes.label              "Pangasiwaan ang mga pahinang kaugnay">
+<!ENTITY  openScopes.accesskey          "a">

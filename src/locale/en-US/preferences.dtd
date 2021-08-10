@@ -51,12 +51,5 @@
 <!ENTITY  colors.active.accesskey       "A">
 
 <!-- Configured pages -->
-<!ENTITY  configuredPages.groupLabel    "Configured Pages">
-
-<!ENTITY  treehead.siteName.label       "Site">
-<!ENTITY  treehead.method.label         "Method">
-
-<!ENTITY  tree.removeRow.label          "Remove scope">
-<!ENTITY  tree.removeRow.accesskey      "R">
-<!ENTITY  tree.removeAllRows.label      "Remove all scopes">
-<!ENTITY  tree.removeAllRows.accesskey  "e">
+<!ENTITY  openScopes.label              "Manage configured pages">
+<!ENTITY  openScopes.accesskey          "c">

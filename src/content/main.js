@@ -119,7 +119,7 @@ var Swarth = {
                 Swarth.openPreferences();
                 break;
             case 4:
-                // reserved (open configured pages)
+                Swarth.openScopes();
                 break;
         }
     },
@@ -130,6 +130,14 @@ var Swarth = {
             "_blank",
             "chrome,modal,titlebar,centerscreen",
             window
+        );
+    },
+
+    openScopes: function () {
+        toOpenWindowByType(
+            "Swarth:Scopes",
+            "chrome://swarth/content/scopes.xul",
+            "chrome,titlebar,resizable,centerscreen"
         );
     },
 
@@ -311,7 +319,7 @@ this.Swarth.observer = {
     observe: function (aSubject, aTopic, aData) {
         switch (aTopic) {
             case "swm-state-changed":
-                if (aData == "scope-updated") {
+                if (aData.includes("scope-updated")) {
                     Swarth.updateCurrentScope();
                     Swarth.adjustMethodMenuItems();
                 }

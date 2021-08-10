@@ -204,24 +204,27 @@ var StylesheetManager = {
         return this.kMethodDefault;
     },
 
-    updateScope: function (aURI, aMethod, aPrivateContext) {
+    setMethod: function (aURI, aMethod, aPrivateContext, aSuppress) {
         let targetConfig = aPrivateContext ? ScopeConfigTemporary : ScopeConfig.data;
         if (aMethod == this.kMethodDefault) {
             delete targetConfig[aURI];
         } else {
             targetConfig[aURI] = aMethod;
         }
+        if (!aSuppress) {
+            let data = ["scope-updated", aURI, aMethod, aPrivateContext].join(" ");
+            Services.obs.notifyObservers(null, "swm-state-changed", data);
+        }
     },
 
-    setMethod: function (aURI, aMethod, aPrivateContext) {
-        if (Array.isArray(aURI)) {
-            for (let i = 0; i < aURI.length; i++) {
-                this.updateScope(aURI[i], aMethod, aPrivateContext);
-            }
-        } else {
-            this.updateScope(aURI, aMethod, aPrivateContext);
+    setMethods: function (aScopeArray, aPrivateContext, aConsolidate) {
+        for (let i = 0; i < aScopeArray.length; i++) {
+            let scope = aScopeArray[i];
+            this.setMethod(scope[0], scope[1], aPrivateContext, aConsolidate);
         }
-        Services.obs.notifyObservers(null, "swm-state-changed", "scope-updated");
+        if (aConsolidate) {
+            Services.obs.notifyObservers(null, "swm-state-changed", "scope-updated multiple");
+        }
     },
 };
 

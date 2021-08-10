@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog [
+    <!ENTITY % preferencesDTD SYSTEM "chrome://swarth/locale/preferences.dtd"> %preferencesDTD;
+    <!ENTITY % dialogDTD SYSTEM "chrome://swarth/locale/scopes.dtd"> %dialogDTD;
+]>
+
+<dialog id="ScopeDialog"
+        class="windowDialog"
+        windowtype="Swarth:Scopes"
+        title="&window.title;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        style="width: &window.width;;"
+        onload="gScopeDialog.onLoad();"
+        onunload="gScopeDialog.onUnload();"
+        ondialogaccept="gScopeDialog.onAccept();"
+        persist="screenX screenY width height"
+        buttons="accept,cancel">
+    <script type="application/javascript"
+            src="chrome://global/content/treeUtils.js"/>
+    <script type="application/javascript"
+            src="chrome://swarth/content/scopes.js"/>
+    <vbox class="contentPane"
+          flex="1">
+        <label id="urlLabel"
+               control="urlTextbox"
+               value="&address.label;"
+               accesskey="&address.accesskey;"/>
+        <hbox align="start">
+            <textbox id="urlTextbox"
+                     flex="1"
+                     oninput="gScopeDialog.onHostInput(event.target);"
+                     onkeypress="gScopeDialog.onHostKeyPress(event);"/>
+        </hbox>
+        <hbox pack="end">
+            <button id="addScopeBtn"
+                    label="&addScope.label;"
+                    accesskey="&addScope.accesskey;"
+                    oncommand="gScopeDialog.onRowAdded();"
+                    disabled="true"/>
+            <menulist id="scopeMethodMenu"
+                      flex="1"
+                      disabled="true">
+                <menupopup>
+                    <menuitem id="method-0"
+                              value="0"
+                              label="&method.retainPageStyle.label;"/>
+                    <menuitem id="method-1"
+                              value="1"
+                              label="&method.cssProcessor.label;"/>
+                    <menuitem id="method-2"
+                              value="2"
+                              label="&method.cssSimple.label;"/>
+                    <menuitem id="method-3"
+                              value="3"
+                              label="&method.colorInversion.label;"/>
+                </menupopup>
+            </menulist>
+        </hbox>
+        <separator class="thin"/>
+        <tree id="scopeTree"
+              flex="1"
+              style="height: 18em;"
+              hidecolumnpicker="true"
+              onkeypress="gScopeDialog.onTreeKeyPress(event)"
+              onselect="gScopeDialog.onRowSelected(event);">
+            <treecols>
+                <treecol id="siteCol"
+                         label="&treehead.siteName.label;"
+                         flex="3"
+                         persist="width"
+                         onclick="gScopeDialog.onColumnSorted(event);"/>
+                <splitter class="tree-splitter"/>
+                <treecol id="methodCol"
+                         label="&treehead.method.label;"
+                         flex="1"
+                         persist="width"
+                         onclick="gScopeDialog.onColumnSorted(event);"/>
+            </treecols>
+            <treechildren/>
+        </tree>
+    </vbox>
+    <hbox>
+        <hbox class="actionButtons"
+              align="left"
+              flex="1">
+            <button id="removeRow"
+                    disabled="true"
+                    icon="remove"
+                    label="&removeRow.label;"
+                    accesskey="&removeRow.accesskey;"
+                    oncommand="gScopeDialog.onRowDeleted();"/>
+            <button id="removeAllRows"
+                    icon="clear"
+                    label="&removeAllRows.label;"
+                    accesskey="&removeAllRows.accesskey;"
+                    oncommand="gScopeDialog.onAllRowsDeleted();"/>
+        </hbox>
+    </hbox>
+</dialog>

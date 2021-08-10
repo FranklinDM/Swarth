@@ -12,12 +12,9 @@
             title="&prefWindow.title;"
             buttons="accept,cancel,extra1"
             buttonlabelextra1="&resetAll.label;"
-            ondialogextra1="gPreferencesDialog.onDialogResetAll();"
-            onbeforeaccept="gPreferencesDialog.onBeforeAccept();">
+            ondialogextra1="gPreferencesDialog.onDialogResetAll();">
     <script type="application/javascript"
             src="chrome://swarth/content/preferences.js" />
-    <script type="application/javascript"
-            src="chrome://global/content/treeUtils.js"/>
     <prefpane id="SwarthDialogPane"
               class="largeDialogContainer"
               onpaneload="gPreferencesDialog.init();">
@@ -113,9 +110,9 @@
                         <menuitem id="tbAction-3"
                                   value="3"
                                   label="&tbAction.openPrefs.label;"/>
-<!--                         <menuitem id="tbAction-4"
+                        <menuitem id="tbAction-4"
                                   value="4"
-                                  label="&tbAction.openConfPages.label;"/> -->
+                                  label="&tbAction.openConfPages.label;"/>
                     </menupopup>
                 </menulist>
             </hbox>
@@ -213,39 +210,9 @@
         </hbox>
 
         <!-- Configured Pages -->
-        <groupbox>
-            <caption label="&configuredPages.groupLabel;"/>
-            <tree id="scopeTree"
-                  flex="1"
-                  style="height: 18em;"
-                  hidecolumnpicker="true"
-                  onkeypress="gPreferencesDialog.onTreeKeyPress(event)"
-                  onselect="gPreferencesDialog.onRowSelected();">
-                <treecols>
-                    <treecol id="siteCol"
-                             label="&treehead.siteName.label;"
-                             flex="3"
-                             persist="width"
-                             onclick="gPreferencesDialog.onColumnSorted(event);"/>
-                    <splitter class="tree-splitter"/>
-                    <treecol id="methodCol"
-                             label="&treehead.method.label;"
-                             flex="1"
-                             persist="width"
-                             onclick="gPreferencesDialog.onColumnSorted(event);"/>
-                </treecols>
-                <treechildren/>
-            </tree>
-            <hbox class="actionButtons" align="left" flex="1">
-                <button id="removeRow" disabled="true"
-                        accesskey="&tree.removeRow.accesskey;"
-                        icon="remove" label="&tree.removeRow.label;"
-                        oncommand="gPreferencesDialog.onRowDeleted();"/>
-                <button id="removeAllRows"
-                        icon="clear" label="&tree.removeAllRows.label;"
-                        accesskey="&tree.removeAllRows.accesskey;"
-                        oncommand="gPreferencesDialog.onAllRowsDeleted();"/>
-            </hbox>
-        </groupbox>
+        <button id="scopeButton"
+                label="&openScopes.label;"
+                accesskey="&openScopes.accesskey;"
+                oncommand="gPreferencesDialog.openScopes();"/>
     </prefpane>
 </prefwindow>
