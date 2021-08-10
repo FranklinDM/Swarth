@@ -112,9 +112,6 @@ var Swarth = {
                     Swarth.onMethodSelected(null, Swarth.ssm.kMethodDisabled);
                 }
                 break;
-            case 2:
-                // reserved (toggle between real default)
-                break;
             case 3:
                 Swarth.openPreferences();
                 break;

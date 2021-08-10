@@ -18,7 +18,6 @@
 <!ENTITY  tbAction.control.label        "Aksiyon ng toolbar button:">
 <!ENTITY  tbAction.control.accesskey    "T">
 <!ENTITY  tbAction.toggleEnabled.label  "Toggle Swarth's enabled state">
-<!ENTITY  tbAction.toggleInherit.label  "Magpalitan: inherited method at panatilihin ang estilo ng pahina">
 <!ENTITY  tbAction.toggleDefault.label  "Magpalitan: paunang-tukoy at panatilihin ang estilo ng pahina">
 <!ENTITY  tbAction.openPrefs.label      "Buksan ang diyalogo ng mga Preperensiya">
 <!ENTITY  tbAction.openConfPages.label  "Buksan ang diyalogo ng mga Pahinang Kaugnay">

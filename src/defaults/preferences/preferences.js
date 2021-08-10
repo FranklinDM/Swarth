@@ -1,4 +1,3 @@
-pref("extensions.swarth@franklindm.description", "chrome://swarth/locale/main.properties");
 pref("extensions.swarth.enabled", true);
 pref("extensions.swarth.toolbar_action", 0);
 pref("extensions.swarth.follow_preferred_color_scheme", false);

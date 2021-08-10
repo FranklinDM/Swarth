@@ -18,7 +18,6 @@
 <!ENTITY  tbAction.control.label        "Toolbar button action:">
 <!ENTITY  tbAction.control.accesskey    "T">
 <!ENTITY  tbAction.toggleEnabled.label  "Toggle extension enabled state">
-<!ENTITY  tbAction.toggleInherit.label  "Switch: inherited method and retain page style">
 <!ENTITY  tbAction.toggleDefault.label  "Switch: default method and retain page style">
 <!ENTITY  tbAction.openPrefs.label      "Open Preferences dialog">
 <!ENTITY  tbAction.openConfPages.label  "Open Configured Pages dialog">

@@ -103,10 +103,7 @@
                                   label="&tbAction.toggleEnabled.label;"/>
                         <menuitem id="tbAction-1"
                                   value="1"
-                                  label="&tbAction.toggleInherit.label;"/>
-<!--                         <menuitem id="tbAction-2"
-                                  value="2"
-                                  label="&tbAction.toggleDefault.label;"/> -->
+                                  label="&tbAction.toggleDefault.label;"/>
                         <menuitem id="tbAction-3"
                                   value="3"
                                   label="&tbAction.openPrefs.label;"/>
