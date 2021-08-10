@@ -26,7 +26,11 @@ var gScopeDialog = {
     _view: {
         sortdir: false,
         sortcol: -1,
-        rowCount: 0,
+        _rowCount: 0,
+
+        get rowCount() {
+            return this._rowCount;
+        },
 
         _getMethodName: function (aMethodID) {
             let menuItem = document.getElementById("method-" + aMethodID);
@@ -127,7 +131,7 @@ var gScopeDialog = {
                     this._tree.treeBoxObject.rowCountChanged(i + 1, -1);
                 }
             }
-            this._view.rowCount--;
+            this._view._rowCount--;
 
             modifiedScopes.delete(aURL);
         } else {
@@ -145,7 +149,7 @@ var gScopeDialog = {
             if (!scopeExists) {
                 gScopes.push(scope);
                 this._tree.treeBoxObject.rowCountChanged(this._view.rowCount - 1, 1);
-                this._view.rowCount++;
+                this._view._rowCount++;
             }
 
             modifiedScopes.set(aURL, aMethodID);
@@ -188,7 +192,7 @@ var gScopeDialog = {
         this._tree = document.getElementById("scopeTree");
 
         gScopes = Object.entries(ScopeConfig.data);
-        this._view.rowCount = gScopes.length;
+        this._view._rowCount = gScopes.length;
         this._tree.view = this._view;
         this.onRowSelected();
 
@@ -238,16 +242,16 @@ var gScopeDialog = {
 
     onRowSelected: function (aEvent) {
         let hasSelection = this._tree.view.selection.count > 0;
-        if (aEvent && aEvent.target == this._tree && hasSelection) {
+        let hasRows = this._tree.view.rowCount > 0;
+        document.getElementById("removeRow").disabled = !hasRows || !hasSelection;
+        document.getElementById("removeAllRows").disabled = !hasRows;
+        if (aEvent && aEvent.target == this._tree && hasSelection && hasRows) {
             let rowIndex = this._tree.view.selection.currentIndex;
             let scope = gScopes[rowIndex];
             this._siteField.value = scope[0];
             this._methodMenu.value = scope[1];
             this.onHostInput(this._siteField);
         }
-        let hasRows = this._tree.view.rowCount > 0;
-        document.getElementById("removeRow").disabled = !hasRows || !hasSelection;
-        document.getElementById("removeAllRows").disabled = !hasRows;
     },
 
     onRowDeleted: function () {
@@ -312,7 +316,8 @@ var gScopeDialog = {
                 this.onAllRowsDeleted();
                 gScopes = Object.entries(srcFile.data);
                 this._tree.treeBoxObject.rowCountChanged(0, gScopes.length);
-                this._view.rowCount = gScopes.length;
+                this._view._rowCount = gScopes.length;
+                this.onRowSelected();
                 for (let i = 0; i < gScopes.length; ++i) {
                     let scope = gScopes[i];
                     modifiedScopes.set(scope[0], scope[1]);
