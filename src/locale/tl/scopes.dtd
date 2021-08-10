@@ -18,7 +18,12 @@
 <!ENTITY  removeAllRows.label           "Alisin Lahat">
 <!ENTITY  removeAllRows.accesskey       "l">
 
-<!ENTITY  importData.label              "Import">
-<!ENTITY  importData.accesskey          "I">
-<!ENTITY  exportData.label              "Export">
+<!ENTITY  tools.label                   "Mga Kasangkapan">
+<!ENTITY  tools.accesskey               "K">
+
+<!ENTITY  importLegacy.label            "Mag-import mula sa ibang mga ekstensiyon…">
+<!ENTITY  importLegacy.accesskey        "e">
+<!ENTITY  importData.label              "Mag-import…">
+<!ENTITY  importData.accesskey          "i">
+<!ENTITY  exportData.label              "Mag-export…">
 <!ENTITY  exportData.accesskey          "x">

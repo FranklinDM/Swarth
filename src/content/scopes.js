@@ -14,6 +14,11 @@ XPCOMUtils.defineLazyModuleGetter(
     "resource://gre/modules/JSONFile.jsm"
 );
 
+const kLegacyPrefs = [
+    "extensions.jid1-QoFqdK4qzUfGWQ@jetpack.configured_pages",
+    "extensions.AdvancedNightMode@Off.JustOff.configured_pages"
+];
+
 var gScopes = null;
 var modifiedScopes = new Map();
 
@@ -22,6 +27,7 @@ var gScopeDialog = {
     _tree: null,
     _siteField: null,
     _methodMenu: null,
+    _bundle: null,
 
     _view: {
         sortdir: false,
@@ -187,6 +193,7 @@ var gScopeDialog = {
 
         Services.obs.addObserver(this, "swm-state-changed", false);
 
+        this._bundle = document.getElementById("bundleScopes");
         this._siteField = document.getElementById("urlTextbox");
         this._methodMenu = document.getElementById("scopeMethodMenu");
         this._tree = document.getElementById("scopeTree");
@@ -286,14 +293,14 @@ var gScopeDialog = {
         let mode = aSave ?
                    Ci.nsIFilePicker.modeSave :
                    Ci.nsIFilePicker.modeOpen;
-
         var filePicker = Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
         filePicker.init(window, null, mode);
-        filePicker.appendFilter("JSON Files", "*.json; *.jsonp;");
+        filePicker.appendFilter("JSON Files", "*.json");
         filePicker.appendFilters(Ci.nsIFilePicker.filterText);
         filePicker.appendFilters(Ci.nsIFilePicker.filterAll);
         filePicker.filterIndex = 0;
-
+        filePicker.defaultExtension = "json";
+        filePicker.defaultString = "swarth-scope.json";
         return filePicker;
     },
 
@@ -307,6 +314,39 @@ var gScopeDialog = {
         return tempFile;
     },
 
+    _reloadScopes: function () {
+        this._tree.treeBoxObject.rowCountChanged(0, gScopes.length);
+        this._view._rowCount = gScopes.length;
+        this.onRowSelected();
+        for (let i = 0; i < gScopes.length; ++i) {
+            let scope = gScopes[i];
+            modifiedScopes.set(scope[0], scope[1]);
+        }
+    },
+
+    onImportLegacy: function () {
+        let dialogTitle = this._bundle.getString("import.title");
+        let dialogBody = this._bundle.getString("import.fromLegacy");
+        let result = Services.prompt.confirm(null, dialogTitle, dialogBody);
+        if (result) {
+            let newScopes = {};
+            for (let i = 0; i < kLegacyPrefs.length; i++) {
+                let prefValue = Services.prefs.getCharPref(kLegacyPrefs[i], "{}");
+                prefValue = JSON.parse(prefValue);
+                newScopes = Object.assign(newScopes, prefValue);
+            }
+            newScopes = Object.entries(newScopes);
+            if (newScopes.length > 0) {
+                this.onAllRowsDeleted();
+                gScopes = newScopes;
+                this._reloadScopes();
+            } else {
+                dialogBody = this._bundle.getString("import.empty");
+                Services.prompt.alert(null, dialogTitle, dialogBody);
+            }
+        }
+    },
+
     onImport: function () {
         let filePicker = this._getFilePicker(false);
         let result = filePicker.show();
@@ -315,13 +355,11 @@ var gScopeDialog = {
             if (srcFile) {
                 this.onAllRowsDeleted();
                 gScopes = Object.entries(srcFile.data);
-                this._tree.treeBoxObject.rowCountChanged(0, gScopes.length);
-                this._view._rowCount = gScopes.length;
-                this.onRowSelected();
-                for (let i = 0; i < gScopes.length; ++i) {
-                    let scope = gScopes[i];
-                    modifiedScopes.set(scope[0], scope[1]);
-                }
+                this._reloadScopes();
+            } else {
+                let dialogTitle = this._bundle.getString("import.title");
+                let dialogBody = this._bundle.getString("import.failed");
+                Services.prompt.alert(null, dialogTitle, dialogBody);
             }
         }
     },
@@ -334,9 +372,11 @@ var gScopeDialog = {
             if (destFile) {
                 destFile._data = Object.fromEntries(gScopes);
                 destFile.saveSoon();
-                return true;
+            } else {
+                let dialogTitle = this._bundle.getString("export.title");
+                let dialogBody = this._bundle.getString("export.failed");
+                Services.prompt.alert(null, dialogTitle, dialogBody);
             }
-            return false;
         }
     },
 };

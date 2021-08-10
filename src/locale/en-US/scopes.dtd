@@ -18,7 +18,12 @@
 <!ENTITY  removeAllRows.label           "Remove All">
 <!ENTITY  removeAllRows.accesskey       "e">
 
-<!ENTITY  importData.label              "Import">
+<!ENTITY  tools.label                   "Tools">
+<!ENTITY  tools.accesskey               "T">
+
+<!ENTITY  importLegacy.label            "Import from other extensions…">
+<!ENTITY  importLegacy.accesskey        "m">
+<!ENTITY  importData.label              "Import…">
 <!ENTITY  importData.accesskey          "I">
-<!ENTITY  exportData.label              "Export">
+<!ENTITY  exportData.label              "Export…">
 <!ENTITY  exportData.accesskey          "x">

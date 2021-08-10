@@ -24,6 +24,8 @@
             src="chrome://global/content/treeUtils.js"/>
     <script type="application/javascript"
             src="chrome://swarth/content/scopes.js"/>
+    <stringbundle id="bundleScopes"
+                  src="chrome://swarth/locale/scopes.properties"/>
     <vbox class="contentPane"
           flex="1">
         <label id="urlLabel"
@@ -100,17 +102,27 @@
                     accesskey="&removeAllRows.accesskey;"
                     oncommand="gScopeDialog.onAllRowsDeleted();"/>
         </hbox>
-        <hbox class="dataButtons"
-              align="right"
+        <hbox align="right"
               flex="1">
-            <button id="importData"
-                    label="&importData.label;"
-                    accesskey="&importData.accesskey;"
-                    oncommand="gScopeDialog.onImport();"/>
-            <button id="exportData"
-                    label="&exportData.label;"
-                    accesskey="&exportData.accesskey;"
-                    oncommand="gScopeDialog.onExport();"/>
+            <button id="toolsButton"
+                    type="menu"
+                    label="&tools.label;"
+                    accesskey="&tools.accesskey;">
+                <menupopup>
+                    <menuitem id="menu_importLegacy"
+                              label="&importLegacy.label;"
+                              accesskey="&importLegacy.accesskey;"
+                              oncommand="gScopeDialog.onImportLegacy();"/>
+                    <menuitem id="menu_importData"
+                              label="&importData.label;"
+                              accesskey="&importData.accesskey;"
+                              oncommand="gScopeDialog.onImport();"/>
+                    <menuitem id="menu_exportData"
+                              label="&exportData.label;"
+                              accesskey="&exportData.accesskey;"
+                              oncommand="gScopeDialog.onExport();"/>
+                </menupopup>
+            </button>
         </hbox>
     </hbox>
 </dialog>
