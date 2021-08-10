@@ -28,11 +28,11 @@ var Swarth = {
     },
     
     get currentMethod () {
-        return Swarth.ssm.getMethod(Swarth.currentScope, Swarth.isBrowserPrivate);
+        return Swarth.scm.getMethod(Swarth.currentScope, Swarth.isBrowserPrivate);
     },
     
     onLoad: function () {
-        Swarth.ssm.init();
+        Swarth.scm.init();
         Swarth.prefs.init();
         gBrowser.addProgressListener(Swarth.pageHandler);
         gBrowser.addEventListener("pageshow", Swarth.pageHandler.onPageShow, false);
@@ -55,7 +55,7 @@ var Swarth = {
         let methodID = aMethodID !== undefined ?
                                      aMethodID :
                                      parseInt(aEvent.target.value);
-        Swarth.ssm.setMethod(Swarth.selectedScope, methodID, Swarth.isBrowserPrivate);
+        Swarth.scm.setMethod(Swarth.selectedScope, methodID, Swarth.isBrowserPrivate);
     },
 
     onPopupShowing: function (aEvent) {
@@ -105,11 +105,11 @@ var Swarth = {
                 Swarth.prefs.toggleEnabled();
                 break;
             case 1:
-                let method = Swarth.ssm.getMethod(Swarth.selectedScope, Swarth.isBrowserPrivate);
-                if (method == Swarth.ssm.kMethodDisabled) {
-                    Swarth.onMethodSelected(null, Swarth.ssm.kMethodDefault);
+                let method = Swarth.scm.getMethod(Swarth.selectedScope, Swarth.isBrowserPrivate);
+                if (method == Swarth.scm.kMethodDisabled) {
+                    Swarth.onMethodSelected(null, Swarth.scm.kMethodDefault);
                 } else {
-                    Swarth.onMethodSelected(null, Swarth.ssm.kMethodDisabled);
+                    Swarth.onMethodSelected(null, Swarth.scm.kMethodDisabled);
                 }
                 break;
             case 3:
@@ -139,23 +139,23 @@ var Swarth = {
     },
 
     adjustMethodMenuItems: function () {
-        var methodID = Swarth.ssm.getMethod(Swarth.selectedScope, Swarth.isBrowserPrivate);
+        var methodID = Swarth.scm.getMethod(Swarth.selectedScope, Swarth.isBrowserPrivate);
         var menuItem = null;
         switch (methodID) {
-            case Swarth.ssm.kMethodDisabled:
+            case Swarth.scm.kMethodDisabled:
                 menuItem = document.getElementById("menu_swRetainStyle");
                 break;
-            case Swarth.ssm.kMethodCSSProcessor:
+            case Swarth.scm.kMethodCSSProcessor:
                 menuItem = document.getElementById("menu_swUseCSSProcessor");
                 break;
-            case Swarth.ssm.kMethodCSSSimple:
+            case Swarth.scm.kMethodCSSSimple:
                 menuItem = document.getElementById("menu_swUseCSSSimple");
                 break;
-            case Swarth.ssm.kMethodColorInversion:
+            case Swarth.scm.kMethodColorInversion:
                 menuItem = document.getElementById("menu_swUseColorInversion");
                 break;
             default:
-            case Swarth.ssm.kMethodDefault:
+            case Swarth.scm.kMethodDefault:
                 menuItem = document.getElementById("menu_swUseDefault");
                 break;
         }
@@ -176,8 +176,8 @@ var Swarth = {
             return;
         }
         Swarth._urls.forEach(function (url) {
-            let methodID = Swarth.ssm.getMethod(url, Swarth.isBrowserPrivate);
-            if (methodID != Swarth.ssm.kMethodDefault) {
+            let methodID = Swarth.scm.getMethod(url, Swarth.isBrowserPrivate);
+            if (methodID != Swarth.scm.kMethodDefault) {
                 Swarth.currentScope = url;
             }
         });
@@ -243,7 +243,7 @@ var Swarth = {
             aDocShell = gBrowser.mCurrentBrowser.docShell;
         }
 
-        return Swarth.ssm.updateDocShell(
+        return Swarth.scm.updateDocShell(
             {
                 docShell: aDocShell,
                 method: Swarth.currentMethod,
@@ -266,8 +266,8 @@ this.Swarth.pageHandler = {
 
         let domWindow = aWebProgress.DOMWindow;
         if (aStateFlags & Ci.nsIWebProgressListener.STATE_STOP &&
-            !Swarth.ssm.windowState.has(domWindow)) {
-            Swarth.ssm.update(
+            !Swarth.scm.windowState.has(domWindow)) {
+            Swarth.scm.update(
                 {
                     window: domWindow,
                     method: Swarth.currentMethod,
@@ -289,7 +289,7 @@ this.Swarth.pageHandler = {
         }
 
         if (aRequest) {
-            Swarth.ssm.update(
+            Swarth.scm.update(
                 {
                     window: aWebProgress.DOMWindow,
                     method: Swarth.currentMethod,
@@ -328,7 +328,7 @@ this.Swarth.observer = {
 
                 break;
             case "dom-window-destroyed":
-                Swarth.ssm.remove(aSubject, true);
+                Swarth.scm.remove(aSubject, true);
                 break;
         }
     },
@@ -348,9 +348,9 @@ this.Swarth.observer = {
 
 XPCOMUtils.defineLazyModuleGetter(
     Swarth,
-    "ssm",
-    "chrome://swarth/content/modules/StylesheetManager.jsm",
-    "StylesheetManager"
+    "scm",
+    "chrome://swarth/content/modules/ScopeManager.jsm",
+    "ScopeManager"
 );
 XPCOMUtils.defineLazyModuleGetter(
     Swarth,

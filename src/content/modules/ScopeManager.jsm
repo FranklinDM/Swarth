@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-var EXPORTED_SYMBOLS = ["StylesheetManager", "ScopeConfig"];
+var EXPORTED_SYMBOLS = ["ScopeManager", "ScopeConfig"];
 
 const { classes: Cc, interfaces: Ci, results: Cr, utils: Cu } = Components;
 
@@ -43,7 +43,7 @@ var ScopeConfigTemporary = {};
 
 var updatedWindows = new WeakSet();
 
-var StylesheetManager = {
+var ScopeManager = {
     kMethodDefault: -1,
     kMethodDisabled: 0,
     kMethodCSSProcessor: 1,
@@ -53,7 +53,7 @@ var StylesheetManager = {
     windowState: new WeakMap(),
 
     init: function () {
-        StylesheetManagerInternal.init();
+        ScopeManagerInternal.init();
     },
 
     apply: function (aWindow, aMethod, aOptions, aInvalidateCache = false) {
@@ -63,7 +63,7 @@ var StylesheetManager = {
             let state = this.windowState.get(aWindow);
             let isSameDocument = (aWindow.document == state.document.get());
             if (isSameDocument && !state.markers) {
-                StylesheetManagerInternal._setMarkers(aWindow);
+                ScopeManagerInternal._setMarkers(aWindow);
                 state.markers = true;
             }
             if (isSameDocument && state.method == aMethod && !invalidateCache) {
@@ -79,9 +79,9 @@ var StylesheetManager = {
             case this.kMethodCSSProcessor:
                 aOptions.important_for_toplevel = (aWindow.top === aWindow.self) ? '!important' : '';
                 sheetURIs = [
-                    StylesheetManagerInternal.getStylesheet(
+                    ScopeManagerInternal.getStylesheet(
                         kSheetBaseKey, aOptions, invalidateCache),
-                    StylesheetManagerInternal.getStylesheet(
+                    ScopeManagerInternal.getStylesheet(
                         kSheetProcessorKey, aOptions, invalidateCache)
                 ];
                 processorInstance = new StylesheetColorProcessor(aWindow, aOptions);
@@ -89,17 +89,17 @@ var StylesheetManager = {
                 break;
             case this.kMethodCSSSimple:
                 sheetURIs = [
-                    StylesheetManagerInternal.getStylesheet(
+                    ScopeManagerInternal.getStylesheet(
                         kSheetBaseKey, aOptions, invalidateCache),
-                    StylesheetManagerInternal.getStylesheet(
+                    ScopeManagerInternal.getStylesheet(
                         kSheetSimpleKey, aOptions, invalidateCache)
                 ];
                 break;
             default:
             case this.kMethodColorInversion:
-                StylesheetManagerInternal._setMarkers(aWindow);
+                ScopeManagerInternal._setMarkers(aWindow);
                 sheetURIs = [
-                    StylesheetManagerInternal.getStylesheet(
+                    ScopeManagerInternal.getStylesheet(
                         kSheetInvertKey, aOptions, invalidateCache)
                 ];
                 break;
@@ -179,7 +179,7 @@ var StylesheetManager = {
     updateDocShell: function (aTarget, aOptions) {
         var invalidateCache =
             ("invalidate" in aTarget) ? aTarget.invalidate : false;
-        var childDocShells = StylesheetManagerInternal._getChildDocShells(aTarget.docShell);
+        var childDocShells = ScopeManagerInternal._getChildDocShells(aTarget.docShell);
         for (let i = 0; i < childDocShells.length; i++) {
             let docShell = childDocShells[i];
             this.update(
@@ -228,7 +228,7 @@ var StylesheetManager = {
     },
 };
 
-Object.freeze(StylesheetManager);
+Object.freeze(ScopeManager);
 
 XPCOMUtils.defineLazyModuleGetter(
     this,
@@ -257,7 +257,7 @@ const kObserverTopics = [
 
 var CachedStylesheets = new Map();
 
-var StylesheetManagerInternal = {
+var ScopeManagerInternal = {
     _initialized: false,
 
     init: function () {

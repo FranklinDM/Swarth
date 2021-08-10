@@ -4,7 +4,7 @@
 
 const { classes: Cc, interfaces: Ci, results: Cr, utils: Cu } = Components;
 
-Cu.import("chrome://swarth/content/modules/StylesheetManager.jsm");
+Cu.import("chrome://swarth/content/modules/ScopeManager.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -126,7 +126,7 @@ var gScopeDialog = {
     },
 
     _addScope: function (aURL, aMethodID) {
-        var scopeRemoved = (aMethodID == StylesheetManager.kMethodDefault);
+        var scopeRemoved = (aMethodID == ScopeManager.kMethodDefault);
         var removedIndex = -1;
 
         if (scopeRemoved) {
@@ -211,7 +211,7 @@ var gScopeDialog = {
     },
 
     onAccept: function () {
-        StylesheetManager.setMethods(Array.from(modifiedScopes));
+        ScopeManager.setMethods(Array.from(modifiedScopes));
         window.close();
     },
 
@@ -269,7 +269,7 @@ var gScopeDialog = {
         gTreeUtils.deleteSelectedItems(this._tree, this._view, gScopes, removedRows);
         for (let i = 0; i < removedRows.length; ++i) {
             let scopeURI = removedRows[i][0];
-            modifiedScopes.set(scopeURI, StylesheetManager.kMethodDefault);
+            modifiedScopes.set(scopeURI, ScopeManager.kMethodDefault);
         }
         document.getElementById("removeRow").disabled = !gScopes.length;
         document.getElementById("removeAllRows").disabled = !gScopes.length;
@@ -283,7 +283,7 @@ var gScopeDialog = {
         gTreeUtils.deleteAll(this._tree, this._view, gScopes, removedRows);
         for (let i = 0; i < removedRows.length; ++i) {
             let scopeURI = removedRows[i][0];
-            modifiedScopes.set(scopeURI, StylesheetManager.kMethodDefault);
+            modifiedScopes.set(scopeURI, ScopeManager.kMethodDefault);
         }
         document.getElementById("removeRow").disabled = true;
         document.getElementById("removeAllRows").disabled = true;
