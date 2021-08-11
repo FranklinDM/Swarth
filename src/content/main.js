@@ -20,37 +20,54 @@ var Swarth = {
     currentScope: null,
     selectedScope: null,
 
+    get _currentBrowser () {
+        if (gBrowser) {
+            return gBrowser.selectedBrowser;
+        } else if (getPanelBrowser()) {
+            return getPanelBrowser();
+        }
+        return null;
+    },
+
     get isBrowserPrivate () {
         if (Swarth.prefs.branch.getBoolPref("keep_private_browsing_scope")) {
             return false;
         }
-        return PrivateBrowsingUtils.isBrowserPrivate(gBrowser.mCurrentBrowser);
+        return PrivateBrowsingUtils.isBrowserPrivate(Swarth._currentBrowser);
     },
     
     get currentMethod () {
         return Swarth.scm.getMethod(Swarth.currentScope, Swarth.isBrowserPrivate);
     },
-    
+
     onLoad: function () {
-        Swarth.scm.init();
-        Swarth.prefs.init();
-        gBrowser.addProgressListener(Swarth.pageHandler);
-        gBrowser.addEventListener("pageshow", Swarth.pageHandler.onPageShow, false);
-        Swarth.observer.register();
+        if (gBrowser) {
+            Swarth.scm.init();
+            Swarth.prefs.init();
+            gBrowser.addProgressListener(Swarth.pageHandler);
+            gBrowser.addEventListener("pageshow", Swarth.pageHandler.onPageShow, false);
+            Swarth.observer.register();
+        } else if (getPanelBrowser()) {
+            getPanelBrowser().addProgressListener(Swarth.pageHandler);
+        }
     },
 
     onUnload: function () {
-        gBrowser.removeProgressListener(Swarth.pageHandler);
-        gBrowser.removeEventListener("pageshow", Swarth.pageHandler.onPageShow);
-        Swarth.observer.unregister();
+        if (gBrowser) {
+            gBrowser.removeProgressListener(Swarth.pageHandler);
+            gBrowser.removeEventListener("pageshow", Swarth.pageHandler.onPageShow);
+            Swarth.observer.unregister();
+        } else if (getPanelBrowser()) {
+            getPanelBrowser().removeProgressListener(Swarth.pageHandler);
+        }
     },
-    
+
     onScopeSelected: function (aEvent) {
         let selectedURL = aEvent.target.value;
         Swarth.selectedScope = selectedURL;
         Swarth.adjustMethodMenuItems();
     },
-    
+
     onMethodSelected: function (aEvent, aMethodID) {
         let methodID = aMethodID !== undefined ?
                                      aMethodID :
@@ -165,7 +182,7 @@ var Swarth = {
     resetScope: function () {
         Swarth._scopePopulated = false;
         Swarth.currentScope = null;
-        let currentURI = gBrowser.mCurrentBrowser.currentURI.cloneIgnoringRef();
+        let currentURI = Swarth._currentBrowser.currentURI.cloneIgnoringRef();
         Swarth._urls = Swarth.generateHierarchy(currentURI);
         Swarth.updateCurrentScope();
         Swarth.selectedScope = Swarth.currentScope;
@@ -240,7 +257,7 @@ var Swarth = {
 
     _updateDocShell: function (aDocShell, aInvalidate) {
         if (aDocShell == null) {
-            aDocShell = gBrowser.mCurrentBrowser.docShell;
+            aDocShell = Swarth._currentBrowser.docShell;
         }
 
         return Swarth.scm.updateDocShell(
