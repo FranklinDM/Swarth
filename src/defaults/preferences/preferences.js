@@ -9,3 +9,4 @@ pref("extensions.swarth.default_link_color", "#7fd7ff");
 pref("extensions.swarth.default_method", 1);
 pref("extensions.swarth.default_selection_color", "#8080ff");
 pref("extensions.swarth.default_visited_color", "#ffafff");
+pref("extensions.swarth.processor.retain_background_image", false);

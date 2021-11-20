@@ -587,6 +587,9 @@ class StylesheetColorProcessor extends StylesheetProcessorAbstract {
     }
     process_background_image(bg_image, bg_repeat, bg_position, selector, base_url) {
         if (bg_image.indexOf('url(') === 0) {
+            if (this.options["processor.retain_background_image"]) {
+                return [bg_image];
+            }
             /// all urls will be like url("lalala") UPD: not necessary in var()
             let url = bg_image.slice(bg_image.indexOf('(') + 1, bg_image.lastIndexOf(')'));
             url = url.trim();
