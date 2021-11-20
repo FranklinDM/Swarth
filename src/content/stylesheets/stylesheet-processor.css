@@ -42,6 +42,17 @@ html {
     }
 }
 
+/* Ars Technica */
+@-moz-document domain('arstechnica.com') {
+    .video-thumbnail,
+    figure .listing {
+      background-blend-mode: normal !important;
+    }
+    figure img {
+      mix-blend-mode: normal !important;
+    }
+}
+
 /*@-moz-document url-prefix("http://music.yandex.ru")
 {
     svg {
