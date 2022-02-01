@@ -44,6 +44,7 @@ var ScopeConfigTemporary = {};
 var updatedWindows = new WeakSet();
 
 var ScopeManager = {
+    kConfigVersion: 1,
     kMethodDefault: -1,
     kMethodDisabled: 0,
     kMethodCSSProcessor: 1,
@@ -54,6 +55,41 @@ var ScopeManager = {
 
     init: function () {
         ScopeManagerInternal.init();
+        this.migrateConfig(ScopeConfig.data);
+    },
+
+    migrateConfig: function (aConfig) {
+        let currentConfigVersion = 0;
+
+        if (aConfig.version != null) {
+            currentConfigVersion = aConfig.version;
+        }
+
+        // Reset current configuration version to 0 if scopes is null
+        if (aConfig.scopes == null) {
+            delete aConfig.scopes;
+            currentConfigVersion = 0;
+        }
+
+        if (currentConfigVersion == this.kConfigVersion) {
+            return;
+        }
+
+        // Move scope information to the "scopes" property and ensure that the
+        // scope method IDs are stored as integers. This attempts to fix issues
+        // caused by erroneously setting string method IDs in the scope dialog.
+        if (currentConfigVersion < 1) {
+            let keys = Object.keys(aConfig);
+            aConfig.scopes = {};
+            for (let i = 0; i < keys.length; i++) {
+                let value = aConfig[keys[i]];
+                aConfig.scopes[keys[i]] = parseInt(value);
+                delete aConfig[keys[i]];
+            }
+        }
+
+        // Update scope configuration version
+        aConfig.version = this.kConfigVersion;
     },
 
     apply: function (aWindow, aMethod, aOptions, aInvalidateCache = false) {
@@ -198,14 +234,14 @@ var ScopeManager = {
         if (aPrivateContext && aURI in ScopeConfigTemporary) {
             return ScopeConfigTemporary[aURI];
         }
-        if (aURI in ScopeConfig.data) {
-            return ScopeConfig.data[aURI];
+        if (aURI in ScopeConfig.data.scopes) {
+            return ScopeConfig.data.scopes[aURI];
         }
         return this.kMethodDefault;
     },
 
     setMethod: function (aURI, aMethod, aPrivateContext, aSuppress) {
-        let targetConfig = aPrivateContext ? ScopeConfigTemporary : ScopeConfig.data;
+        let targetConfig = aPrivateContext ? ScopeConfigTemporary : ScopeConfig.data.scopes;
         if (aMethod == this.kMethodDefault) {
             delete targetConfig[aURI];
         } else {

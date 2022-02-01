@@ -198,7 +198,7 @@ var gScopeDialog = {
         this._methodMenu = document.getElementById("scopeMethodMenu");
         this._tree = document.getElementById("scopeTree");
 
-        gScopes = Object.entries(ScopeConfig.data);
+        gScopes = Object.entries(ScopeConfig.data.scopes);
         this._view._rowCount = gScopes.length;
         this._tree.view = this._view;
         this.onRowSelected();
@@ -335,7 +335,8 @@ var gScopeDialog = {
                 prefValue = JSON.parse(prefValue);
                 newScopes = Object.assign(newScopes, prefValue);
             }
-            newScopes = Object.entries(newScopes);
+            ScopeManager.migrateConfig(newScopes);
+            newScopes = Object.entries(newScopes.scopes);
             if (newScopes.length > 0) {
                 this.onAllRowsDeleted();
                 gScopes = newScopes;
@@ -354,7 +355,9 @@ var gScopeDialog = {
             let srcFile = this._tryLoad(filePicker.file.path);
             if (srcFile) {
                 this.onAllRowsDeleted();
-                gScopes = Object.entries(srcFile.data);
+                let tmpData = srcFile.data;
+                ScopeManager.migrateConfig(tmpData);
+                gScopes = Object.entries(tmpData.scopes);
                 this._reloadScopes();
             } else {
                 let dialogTitle = this._bundle.getString("import.title");
@@ -370,7 +373,8 @@ var gScopeDialog = {
         if (result != Ci.nsIFilePicker.returnCancel) {
             let destFile = this._tryLoad(filePicker.file.path);
             if (destFile) {
-                destFile._data = Object.fromEntries(gScopes);
+                destFile._data.version = ScopeManager.kConfigVersion;
+                destFile._data.scopes = Object.fromEntries(gScopes);
                 destFile.saveSoon();
             } else {
                 let dialogTitle = this._bundle.getString("export.title");
