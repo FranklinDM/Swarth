@@ -240,7 +240,7 @@ var gScopeDialog = {
 
     onRowAdded: function () {
         var url = this._siteField.value.trim();
-        var methodID = this._methodMenu.value;
+        var methodID = parseInt(this._methodMenu.value);
         // FIXME: Sanitize the URL
         this._addScope(url, methodID);
         this._siteField.value = "";
