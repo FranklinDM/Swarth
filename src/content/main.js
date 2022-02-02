@@ -296,10 +296,6 @@ this.Swarth.pageHandler = {
     },
 
     onLocationChange: function (aWebProgress, aRequest, aLocationURI, aFlags) {
-        if (aFlags & Ci.nsIWebProgressListener.LOCATION_CHANGE_SAME_DOCUMENT) {
-            return;
-        }
-
         let isTopLevel = aWebProgress.isTopLevel;
         if (isTopLevel) {
             Swarth.resetScope();
