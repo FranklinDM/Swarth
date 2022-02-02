@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.0.4
+* Reset scope if location change was caused by (push/pop/replace)State
+
 ### 1.0.3
 * Ensure that the method ID is an integer when setting the method to be used for a particular scope in the scopes dialog
 * Implement migration for scope configuration
