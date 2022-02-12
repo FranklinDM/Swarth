@@ -326,6 +326,7 @@ var ScopeManagerInternal = {
             case "swm-state-changed":
                 if (aData == "invalidate") {
                     updatedWindows = new WeakSet();
+                    CachedStylesheets.clear();
                 }
                 break;
         }
