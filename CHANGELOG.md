@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.0.5
+* Ensure all cached stylesheets are cleared upon receiving invalidation event
+
 ### 1.0.4
 * Reset scope if location change was caused by (push/pop/replace)State
 
