@@ -344,6 +344,12 @@ var ScopeManagerInternal = {
     },
 
     _getChildDocShells: function (parentDocShell) {
+        // Guard against cases where the parent docshell is either
+        // non-existent or does not have a getDocShellEnumerator method.
+        if (!parentDocShell ||
+            typeof parentDocShell.getDocShellEnumerator !== "function") {
+            return [];
+        }
         let docShellsEnum = parentDocShell.getDocShellEnumerator(
             Ci.nsIDocShellTreeItem.typeAll,
             Ci.nsIDocShell.ENUMERATE_FORWARDS
