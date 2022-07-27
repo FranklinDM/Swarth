@@ -142,7 +142,7 @@ var Swarth = {
         openDialog(
             "chrome://swarth/content/preferences.xul",
             "_blank",
-            "chrome,modal,titlebar,centerscreen",
+            "chrome,titlebar,centerscreen",
             window
         );
     },
