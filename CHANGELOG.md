@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.0.7
+* Don't launch preferences window as modal from the toolbar button.
+
 ### 1.0.6
 * Guard against document shells that are either null or does not have any children
 * Implement support for Pale Moon 31 and restore support for Basilisk
