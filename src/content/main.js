@@ -284,6 +284,10 @@ this.Swarth.pageHandler = {
         let domWindow = aWebProgress.DOMWindow;
         if (aStateFlags & Ci.nsIWebProgressListener.STATE_STOP &&
             !Swarth.scm.windowState.has(domWindow)) {
+            // Don't bother updating if the current page is blocked.
+            if (Swarth.scm.isForceBlocked(domWindow)) {
+                return;
+            }
             Swarth.scm.update(
                 {
                     window: domWindow,
@@ -302,6 +306,10 @@ this.Swarth.pageHandler = {
         }
 
         if (aRequest) {
+            // Don't bother updating if the current page is blocked.
+            if (Swarth.scm.isForceBlocked(domWindow)) {
+                return;
+            }
             Swarth.scm.update(
                 {
                     window: aWebProgress.DOMWindow,

@@ -10,3 +10,4 @@ pref("extensions.swarth.default_method", 1);
 pref("extensions.swarth.default_selection_color", "#8080ff");
 pref("extensions.swarth.default_visited_color", "#ffafff");
 pref("extensions.swarth.processor.retain_background_image", false);
+pref("extensions.swarth.compatibility.ubo_epicker_check_delay", 50);
