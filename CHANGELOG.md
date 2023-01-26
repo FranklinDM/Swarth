@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.0.8
+* Exclude uBlock Origin's element picker from scope application
+  - This also adds a hidden preference to adjust the delay before checking if the current page is uBlock Origin's element picker overlay (`extensions.swarth.compatibility.ubo_epicker_check_delay`)
+* Mark as compatible with Pale Moon 32
+
 ### 1.0.7
 * Don't launch preferences window as modal from the toolbar button
 
