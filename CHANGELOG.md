@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.0.9
+* Fix missing domWindow variable
+
 ### 1.0.8
 * Exclude uBlock Origin's element picker from scope application
   - This also adds a hidden preference to adjust the delay before checking if the current page is uBlock Origin's element picker overlay (`extensions.swarth.compatibility.ubo_epicker_check_delay`)
