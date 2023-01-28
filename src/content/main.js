@@ -306,13 +306,14 @@ this.Swarth.pageHandler = {
         }
 
         if (aRequest) {
+            let domWindow = aWebProgress.DOMWindow;
             // Don't bother updating if the current page is blocked.
             if (Swarth.scm.isForceBlocked(domWindow)) {
                 return;
             }
             Swarth.scm.update(
                 {
-                    window: aWebProgress.DOMWindow,
+                    window: domWindow,
                     method: Swarth.currentMethod,
                     isTopLevel: isTopLevel
                 },
