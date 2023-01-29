@@ -307,6 +307,7 @@ const kSheetSimpleKey = "simple";
 const kSheetInvertKey = "invert";
 const kSheetProcessorKey = "processor";
 
+const kBaseSheetURI = "chrome://swarth/content/stylesheets/";
 const kCharset = "UTF-8";
 
 const kMarkerClassPrefix = 'sw-';
@@ -449,16 +450,16 @@ var ScopeManagerInternal = {
             let sheetURI = "";
             switch (aSheetKey) {
                 case kSheetInvertKey:
-                    sheetURI = "chrome://swarth/content/stylesheets/invert.css";
+                    sheetURI = kBaseSheetURI + "invert.css";
                     break;
                 case kSheetBaseKey:
-                    sheetURI = "chrome://swarth/content/stylesheets/base.css";
+                    sheetURI = kBaseSheetURI + "base.css";
                     break;
                 case kSheetSimpleKey:
-                    sheetURI = "chrome://swarth/content/stylesheets/simple.css";
+                    sheetURI = kBaseSheetURI + "simple.css";
                     break;
                 case kSheetProcessorKey:
-                    sheetURI = "chrome://swarth/content/stylesheets/stylesheet-processor.css";
+                    sheetURI = kBaseSheetURI + "stylesheet-processor.css";
                     break;
                 default:
                     return false;
