@@ -93,9 +93,16 @@ var ScopeManager = {
     },
 
     isForceBlocked: function (aWindow) {
-        if (aWindow.document.documentElement.id == "ublock0-epicker") {
-            return true;
+        if (!aWindow || !aWindow.document) {
+            return false;
         }
+
+        if (aWindow.document.documentElement) {
+            if (aWindow.document.documentElement.id == "ublock0-epicker") {
+                return true;
+            }
+        }
+
         return false;
     },
 
