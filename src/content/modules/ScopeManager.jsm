@@ -45,6 +45,7 @@ var updatedWindows = new WeakSet();
 
 var ScopeManager = {
     kConfigVersion: 1,
+    kMethodBrowserOverride: -2,
     kMethodDefault: -1,
     kMethodDisabled: 0,
     kMethodCSSProcessor: 1,
@@ -126,6 +127,12 @@ var ScopeManager = {
         let processorInstance = null;
         let sheetURIs = [];
         switch (aMethod) {
+            case this.kMethodBrowserOverride:
+                sheetURIs = [
+                    ScopeManagerInternal.getStylesheet(
+                        kSheetBrowserOverrideKey, aOptions, invalidateCache)
+                ];
+                break;
             case this.kMethodCSSProcessor:
                 aOptions.important_for_toplevel = (aWindow.top === aWindow.self) ? '!important' : '';
                 sheetURIs = [
@@ -227,7 +234,8 @@ var ScopeManager = {
         }
         if (aOptions.enabled && aOptions.color_enabled) {
             var scopeEnabled = (aTarget.method != this.kMethodDisabled);
-            if (aTarget.method == this.kMethodColorInversion && !aTarget.isTopLevel) {
+            if (aTarget.method == this.kMethodColorInversion &&
+                !aTarget.isTopLevel) {
                 scopeEnabled = false;
             }
             if (scopeEnabled) {
@@ -302,10 +310,11 @@ XPCOMUtils.defineLazyModuleGetter(
     "resource://gre/modules/NetUtil.jsm"
 );
 
-const kSheetBaseKey   = "base";
-const kSheetSimpleKey = "simple";
-const kSheetInvertKey = "invert";
-const kSheetProcessorKey = "processor";
+const kSheetBaseKey            = "base";
+const kSheetSimpleKey          = "simple";
+const kSheetInvertKey          = "invert";
+const kSheetProcessorKey       = "processor";
+const kSheetBrowserOverrideKey = "browser-override";
 
 const kBaseSheetURI = "chrome://swarth/content/stylesheets/";
 const kCharset = "UTF-8";
@@ -460,6 +469,9 @@ var ScopeManagerInternal = {
                     break;
                 case kSheetProcessorKey:
                     sheetURI = kBaseSheetURI + "stylesheet-processor.css";
+                    break;
+                case kSheetBrowserOverrideKey:
+                    sheetURI = kBaseSheetURI + "browser-override.css";
                     break;
                 default:
                     return false;

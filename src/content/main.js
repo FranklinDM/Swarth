@@ -47,6 +47,14 @@ var Swarth = {
             gBrowser.addProgressListener(Swarth.pageHandler);
             gBrowser.addEventListener("pageshow", Swarth.pageHandler.onPageShow, false);
             Swarth.observer.register();
+            Swarth.scm.update(
+                {
+                    window: window,
+                    method: Swarth.scm.kMethodBrowserOverride,
+                    isTopLevel: true
+                },
+                Swarth.prefs.getAll()
+            );
         } else if (getPanelBrowser()) {
             getPanelBrowser().addProgressListener(Swarth.pageHandler);
         }
@@ -343,9 +351,20 @@ this.Swarth.observer = {
                     Swarth.adjustMethodMenuItems();
                 }
 
+                let invalidateSheets = (aData == "invalidate");
                 Swarth._updateDocShell(
                     null,
-                    (aData == "invalidate")
+                    invalidateSheets
+                );
+
+                Swarth.scm.update(
+                    {
+                        window: window,
+                        method: Swarth.scm.kMethodBrowserOverride,
+                        isTopLevel: true,
+                        invalidate: invalidateSheets,
+                    },
+                    Swarth.prefs.getAll()
                 );
 
                 break;
