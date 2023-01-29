@@ -100,22 +100,6 @@ var ScopeManager = {
     },
 
     apply: function (aWindow, aMethod, aOptions, aInvalidateCache = false) {
-        // XXX: uBlock Origin's element picker inserts itself to content using
-        // an iframe and does not have any identifiable markers that we can
-        // use by the time this function is called. To workaround that, we
-        // delay checking for the element picker's ID and try to un-apply any
-        // changes that we've made.
-        if (aWindow.location &&
-            aWindow.location.href == "about:blank") {
-            aWindow.setTimeout(function () {
-                if (ScopeManager.isForceBlocked(aWindow)) {
-                    if (ScopeManager.windowState.has(aWindow)) {
-                        ScopeManager.remove(aWindow);
-                    }
-                }
-            }, aOptions["compatibility.ubo_epicker_check_delay"]);
-        }
-
         var invalidateCache = aInvalidateCache ||
                 (this.windowState.has(aWindow) && !updatedWindows.has(aWindow));
         if (this.windowState.has(aWindow)) {
@@ -182,6 +166,22 @@ var ScopeManager = {
             }
         );
         updatedWindows.add(aWindow);
+
+        // XXX: uBlock Origin's element picker inserts itself to content using
+        // an iframe and does not have any identifiable markers that we can
+        // use by the time this function is called. To workaround that, we
+        // delay checking for the element picker's ID and try to un-apply any
+        // changes that we've made.
+        if (aWindow.location &&
+            aWindow.location.href == "about:blank") {
+            aWindow.setTimeout(function () {
+                if (ScopeManager.isForceBlocked(aWindow)) {
+                    if (ScopeManager.windowState.has(aWindow)) {
+                        ScopeManager.remove(aWindow);
+                    }
+                }
+            }, aOptions["compatibility.ubo_epicker_check_delay"]);
+        }
 
         return true;
     },
