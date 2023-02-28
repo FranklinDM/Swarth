@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.1.0
+* Override tab panel background color
+  - This implements an internal color method for use with the browser window. This should hopefully get rid of the white flashes and follows the same method used in bug 1488384, which overrides the background color of the tab panel (anonymous content that is a *child of the `browser` element).
+* Fix conflicts with uBO element picker
+
 ### 1.0.9
 * Fix missing domWindow variable
 
